@@ -2,6 +2,7 @@ package com.example.demo.config.securityConfig.filter;
 
 
 
+import com.alibaba.fastjson2.JSON;
 import com.example.demo.config.securityConfig.token.WeChatAuthenticationToken;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RedisCache;
@@ -50,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
        if(object==null){
            //todo 这是登录过期的，要重新登录
        }
-        Collection collection=(Collection) object;
+        Collection collection= JSON.parseObject(JSON.toJSONString(object),Collection.class);
         //将用户信息存入SecurityContextHolder
         //TODO 获取权限信息存入到Authentication中
         WeChatAuthenticationToken weChatAuthenticationToken=new WeChatAuthenticationToken(userId,collection);
