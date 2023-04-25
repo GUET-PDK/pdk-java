@@ -3,9 +3,11 @@ package com.example.demo.config.securityConfig.filter;
 
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.example.demo.config.securityConfig.token.WeChatAuthenticationToken;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RedisCache;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,9 +23,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 //定义JWT认证过滤器
 @Component
@@ -36,25 +37,73 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //获取token
         String token=request.getHeader("token");
         if(!StringUtils.hasText(token)){
-            //假如是空字符串
             filterChain.doFilter(request,response);
-            return;
+         return;
         }
-        //解析token
         if(!JwtUtil.verify(token)){
-            //todo 这是失败的token，要返回失败
+
+            response.setContentType("application/json; charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(403);
+            Map result = new HashMap();
+            result.put("code", 403);
+//        result.put("codeRtn", false);
+            // 错误信息
+            result.put("errorMsg","token验证失败");
+           ObjectMapper objectMapper= new ObjectMapper();
+            String json = objectMapper.writeValueAsString(result);
+            response.getWriter().write(json);
+            response.getWriter().flush();
+        }else {
+            //从redis中获取用户信息
+            Claims claims=JwtUtil.getClaim(token);
+            String userId=claims.get("userId").toString();
+            Object object= redisCache.getCacheObject("login_"+userId);
+            if(object==null){
+                //todo 这是登录过期的，要重新登录
+                System.out.println("已经过期了");
+                response.setContentType("application/json; charset=utf-8");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(403);
+                Map result = new HashMap();
+                result.put("code", 403);
+//        result.put("codeRtn", false);
+                // 错误信息
+                result.put("errorMsg","登录过期");
+                ObjectMapper objectMapper= new ObjectMapper();
+                String json = objectMapper.writeValueAsString(result);
+                response.getWriter().write(json);
+                response.getWriter().flush();
+            }
+          if(!redisCache.expire("login_"+userId,30,TimeUnit.MINUTES)){
+              response.setContentType("application/json; charset=utf-8");
+              response.setCharacterEncoding("UTF-8");
+
+              Map result = new HashMap();
+              result.put("code", 505);
+//        result.put("codeRtn", false);
+              // 错误信息
+              result.put("errorMsg","设置redis过期时间失败");
+              ObjectMapper objectMapper= new ObjectMapper();
+              String json = objectMapper.writeValueAsString(result);
+              response.getWriter().write(json);
+              response.getWriter().flush();
+          }
+          Map map=new HashMap();
+          map.put("userId",userId);
+           token= JwtUtil.generate(map);
+           response.setHeader("token",token);
+//            List<Record> msgList = JSON.parseArray(msgEncap.getString("msgList"), Record.class);
+//            List<GrantedAuthority> collection= JSON.parseArray(JSON.toJSONString(object),List.class);
+            Collection<GrantedAuthority> collection=(Collection<GrantedAuthority>)object;
+            System.out.println(collection.toString());
+            WeChatAuthenticationToken weChatAuthenticationToken=new WeChatAuthenticationToken(userId,collection);
+            SecurityContextHolder.getContext().setAuthentication(weChatAuthenticationToken);
         }
-        //从redis中获取用户信息
-        Claims claims=JwtUtil.getClaim(token);
-        String userId=claims.get("userId").toString();
-       Object object= redisCache.getCacheObject("login_"+userId);
-       if(object==null){
-           //todo 这是登录过期的，要重新登录
-       }
-        Collection collection= JSON.parseObject(JSON.toJSONString(object),Collection.class);
+
         //将用户信息存入SecurityContextHolder
         //TODO 获取权限信息存入到Authentication中
-        WeChatAuthenticationToken weChatAuthenticationToken=new WeChatAuthenticationToken(userId,collection);
+
 //        LoginUser loginUser=new LoginUser(new MyUser());
 //        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=
 //                new UsernamePasswordAuthenticationToken(loginUser,null,null);

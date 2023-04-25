@@ -16,7 +16,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean addNewUser(User user) {
        int a= userMapper.insert(user);
-       int b= userMapper.insertMiddleUserRole(user.getUserId(), RoleEnum.普通用户.name());
+      int roleId= userMapper.selectRoleIdByRoleName(RoleEnum.普通用户.name());
+       int b= userMapper.insertMiddleUserRole(user.getUserId(), roleId);
        if(a+b==2)
         return true;
        else return false;

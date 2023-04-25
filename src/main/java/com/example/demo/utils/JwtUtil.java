@@ -48,8 +48,8 @@ public class JwtUtil {
                 // .setSubject("weimi")//主题
                 // .setIssuer("weimi") //发送方
                 .setClaims(claims)  //自定义claims
-                .setIssuedAt(nowDate)//当前时间
-                .setExpiration(expireDate) //过期时间
+//                .setIssuedAt(nowDate)//当前时间
+//                .setExpiration(expireDate) //过期时间
                 .signWith(key)//签名算法和key
                 .compact();
     }
@@ -70,8 +70,8 @@ public class JwtUtil {
                 // .setSubject("weimi")//主题
                 //    .setIssuer("weimi") //发送方
                 .setClaims(claims)  //自定义claims
-                .setIssuedAt(nowDate)//当前时间
-                .setExpiration(expireDate) //过期时间
+//                .setIssuedAt(nowDate)//当前时间
+//                .setExpiration(expireDate) //过期时间
                 .signWith(key)//签名算法和key
                 .compact();
     }

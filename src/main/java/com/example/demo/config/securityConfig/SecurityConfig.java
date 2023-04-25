@@ -3,6 +3,7 @@ package com.example.demo.config.securityConfig;
 
 import com.example.demo.config.securityConfig.filter.JwtAuthenticationTokenFilter;
 import com.example.demo.config.securityConfig.filter.WeChatAuthenticationFilter;
+import com.example.demo.config.securityConfig.handler.WxAccessDeniedHandlerImpl;
 import com.example.demo.config.securityConfig.handler.WxAuthenticationFailureHandler;
 import com.example.demo.config.securityConfig.handler.WxAuthenticationnSuccessHandler;
 import com.example.demo.config.securityConfig.provider.WeChatAuthenticationProvider;
@@ -28,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     WxAuthenticationFailureHandler wxAuthenticationFailureHandler;
 
+    @Autowired
+    WxAccessDeniedHandlerImpl wxAccessDeniedHandler;
 
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
@@ -79,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterAt(weChatAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling().accessDeniedHandler(wxAccessDeniedHandler);
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -48,6 +48,7 @@ public class WeChatAuthenticationProvider implements AuthenticationProvider {
         List<User> list=userMapper.selectByMap(map);
         Set permissionSet=new HashSet();
         if(list.size()==0){
+            System.out.println("找不到哈哈哈哈哈哈哈哈哈");
             User user=new User();
             user.setOpenId(openid);
             user.setCreateTime(new Date());

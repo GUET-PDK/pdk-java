@@ -22,6 +22,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import sun.applet.AppletIOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +63,8 @@ public class WeChatAuthenticationFilter extends AbstractAuthenticationProcessing
         }
 
         String code = obtainOpenid(request);
-
+        System.out.println("我的code      "+code);
+        System.out.println("我的appid    "+APPID+"       "+APPSecret);
         if (code == null || code.length() == 0) {
             throw new BadCredentialsException("uid or openid is null.");
         }
@@ -91,6 +93,10 @@ public class WeChatAuthenticationFilter extends AbstractAuthenticationProcessing
         System.out.println("你好 大师傅但是");
         JSONObject jsonObject=JSONObject.parseObject(content);
         String openid=jsonObject.getString("openid");
+//        if(openid==null){
+//            throw new BadCredentialsException("uid or openid is null.");
+//        }
+//        openid="skadjsahdsdasd+nnnnn";
         //todo  后面将要检查非空什么的
         WeChatAuthenticationToken authRequest = new WeChatAuthenticationToken(openid);
 

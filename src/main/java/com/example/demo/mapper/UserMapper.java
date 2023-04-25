@@ -10,5 +10,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     Set<String> selectPermissionByUserId(String  userId);
 
-    int insertMiddleUserRole(String userId,String roleName);
+    int insertMiddleUserRole(String userId,int roleId);
+
+    int selectRoleIdByRoleName(String roleName);
 }
