@@ -34,4 +34,17 @@ public class Order implements Serializable {
     @TableField("address_2")
     private String address2;
     private String orderDescription;
+
+
+    public Order(String userId, int orderType, int orderStatus, Date createTime, Date startTime, Date finishTime, String address1, String address2, String orderDescription) {
+        this.userId = userId;
+        this.orderType = orderType;
+        this.orderStatus = orderStatus;
+        this.createTime = createTime;
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.orderDescription = orderDescription;
+    }
 }
