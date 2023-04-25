@@ -1,6 +1,7 @@
-package com.example.demo.controller;
+package com.example.demo.controller.user;
 
-import com.example.paodekuai.common.Response.RestResponse;
+import com.example.demo.service.impl.cUserServiceImpl;
+import com.example.demo.utils.RestResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -13,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserOrderController extends BaseController{
 
 
+    private cUserServiceImpl UserService;
+
+
     @RequestMapping("/selectOrder")
-    public RestResponse selectOrder(Integer userId)
+    public RestResponse selectOrder()
     {
 
+
+        return new RestResponse(200,"ok",null);
     };
 
 
@@ -30,6 +36,9 @@ public class UserOrderController extends BaseController{
                                      String money)
     {
 
+
+
+        return new RestResponse(200,"ok",null);
     };
 
 
@@ -38,7 +47,7 @@ public class UserOrderController extends BaseController{
     @RequestMapping("/selectOrderStatus")
     public RestResponse selectOrderStatus(Integer userId)
     {
-
+        return new RestResponse(200,"ok",null);
     };
 
 
@@ -46,7 +55,7 @@ public class UserOrderController extends BaseController{
     @RequestMapping("/commentOrder")
     public RestResponse commentOrder(Integer userId)
     {
-
+        return new RestResponse(200,"ok",null);
     };
 
 
