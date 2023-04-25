@@ -3,12 +3,14 @@ package com.example.demo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.entity.Address;
+import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.cUserMapper;
 import com.example.demo.service.IUserService;
 import com.example.demo.service.cUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @ClassName cUserServiceImpl
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @Version 1.0
  **/
 @Service
-public class cUserServiceImpl implements cUserService {
+public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements cUserService {
 
     @Autowired
     cUserMapper userMapper;
@@ -29,7 +31,9 @@ public class cUserServiceImpl implements cUserService {
     }
 
     @Override
-    public int update(User entity, Wrapper<User> updateWrapper) {
-        return userMapper.update(entity,null);
+    public boolean updateById(User entity) {
+        return super.updateById(entity);
     }
+
+
 }

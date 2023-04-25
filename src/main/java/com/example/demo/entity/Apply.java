@@ -1,7 +1,11 @@
 package com.example.demo.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.sql.rowset.serial.SerialArray;
+import java.io.Serializable;
 
 /**
  * @ClassName Apply
@@ -13,8 +17,9 @@ import lombok.NoArgsConstructor;
 
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class Apply {
+public class Apply implements Serializable {
 
     int id;
     int userId;
@@ -22,5 +27,11 @@ public class Apply {
     int idNumber;
     String idImage;
     String cardImage;
-
+    public Apply(int userId, int cardNumber, int idNumber, String idImage, String cardImage) {
+        this.userId = userId;
+        this.cardNumber = cardNumber;
+        this.idNumber = idNumber;
+        this.idImage = idImage;
+        this.cardImage = cardImage;
+    }
 }

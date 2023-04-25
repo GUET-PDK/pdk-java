@@ -1,8 +1,10 @@
 package com.example.demo.controller.user;
 
 import com.example.demo.entity.Address;
+import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
 import com.example.demo.service.impl.UserServiceImpl;
+import com.example.demo.service.impl.cApplyServiceImpl;
 import com.example.demo.service.impl.cUserServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
@@ -27,11 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(value="/user")
 public class UserController extends BaseController{
 
-//    @Autowired
-//    private UserMapper userMapper;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Value("${files.upload.path}")
     private String upImagePath;
@@ -45,6 +42,8 @@ public class UserController extends BaseController{
     @Autowired
     private cUserServiceImpl userService;
 
+    @Autowired
+    private cApplyServiceImpl applyService;
 
     /**
      * @Author ctfliar
@@ -68,8 +67,8 @@ public class UserController extends BaseController{
         User user = new User();
         user.setUserId(userId);
         user.setUserName(name);
-        Integer flag = userService.update(user,null);
-        if(flag.equals(1)){
+        Boolean flag = userService.updateById(user);
+        if(flag){
 
             return new RestResponse(200,"更新用户成功",null);
         }
@@ -114,9 +113,22 @@ public class UserController extends BaseController{
         String cardImagePath = new upLoads().upLoad(cardImage,upImagePath,getImagePath);
 
 
+        JwtUtil jwt = new JwtUtil();
+        int userId = Integer.parseInt(jwt.getClaim(token).get("userId"));;
+
+        Apply apply = new Apply(userId,Integer.parseInt(idNumber),Integer.parseInt(cardNumber),idImagePath,cardImagePath);
+
+        try{
+            applyService.insert(apply);
+            return new RestResponse(200,"申请成功",null);
+        }catch (RuntimeException e)
+        {
+            //后面改成自己的同意异常处理
+            e.printStackTrace();
+        }
 
 
-        return new RestResponse(200,"ok",null);
+        return new RestResponse(200,"申请失败",null);
     };
 
 

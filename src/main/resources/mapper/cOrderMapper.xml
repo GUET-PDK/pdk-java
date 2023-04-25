@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.cOrderMapper">
+
+    <insert id="appraise" >
+        insert into sys_appraise(appraise_description,
+                                 appraise_fraction,
+                                 order_id,
+                                 user_id)
+values (#{comment},#{grade},#{orderId},#{userId})
+    </insert>
+
+    <select id="selectOrderStatus" resultType="int">
+        select order_status from sys_order where user_id = #{userId}
+    </select>
+
+</mapper>

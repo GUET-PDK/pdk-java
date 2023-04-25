@@ -3,6 +3,7 @@ package com.example.demo.mapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.entity.Address;
+import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,6 +21,8 @@ public interface cUserMapper extends BaseMapper<User> {
     Address updateAddress(String userId,String address);
 
 
-    @Override
-    int update(User entity, Wrapper<User> updateWrapper);
+
+
+
+
 }
