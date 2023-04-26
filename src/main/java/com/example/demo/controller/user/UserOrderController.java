@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,59 +72,116 @@ String token=request.getHeader("token");
 
 
 
-//    @RequestMapping("/publishOrder")
-//    public RestResponse publishOrder(
-//                                     String orderType,
-//                                     String orderDescribe,
-//                                     String publishTime,
-//                                     String finishTime,
-//                                     String orderAddress,
-//                                     String money,
-//                                     HttpServletRequest request)
-//    {
-//
-//
-////        使用jwt的工具类，，拿到token里面的用户id
-//        String token=request.getHeader("token");
-//        JwtUtil jwt = new JwtUtil();
-//        String userId = jwt.getClaim(token).get("userId").toString();
-//
-//
-//
-//
-//        Order entity  = new Order(
-//                userId,
-//                orderType,
-//                orderStatus,
-//                createTime,
-//                startTime,
-//                finishTime,
-//                myAddress,
-//                orderAddress,
-//                orderDescribe
-//                );
-//
-//        orderService.insert(entity);
-//
-//
-//        return new RestResponse(200,"ok",null);
-//    };
-//
+    @RequestMapping("/publishOrder")
+    public RestResponse publishOrder(
+                                     String orderType,
+                                     String orderDescribe,
+                                     String publishTime,
+                                     String finishTime,
+                                     String orderAddress,
+                                     String money,
+                                     String myAddress,
+                                     HttpServletRequest request)
+    {
+
+
+//        使用jwt的工具类，，拿到token里面的用户id
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+        int orderType2 = Integer.parseInt(orderType);
+//        订单已完成状态为2，未完成状态为1，未接收为0
+
+        int orderStatus = 0;
+
+        long time = System.currentTimeMillis();
+        Date createTime = new Date(time);
+
+//        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
+////        System.out.println(dateFormat.format(date));
+
+        Date startTime = createTime;
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+        sdf.setLenient(false);
+
+        Date fTime;
+
+        try {
+            Date endTime = sdf.parse(finishTime);
+            fTime = endTime;
+
+        }catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        Order entity  = new Order(
+                userId,
+                orderType2,
+                orderStatus,
+                createTime,
+                startTime,
+                fTime,
+                myAddress,
+                orderAddress,
+                orderDescribe
+                );
+
+        try{
+            orderService.insert(entity);
+            return new RestResponse(200,"发布成功",null);
+        }catch(RuntimeException e){
+            e.printStackTrace();
+        }
+
+
+        return new RestResponse(200,"发布订单失败",null);
+    };
+
 
 
 
     @RequestMapping("/selectOrderStatus")
-    public RestResponse selectOrderStatus(Integer userId)
+    public RestResponse selectOrderStatus(HttpServletRequest request)
     {
-        return new RestResponse(200,"ok",null);
+        String token = request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
+
+        try{
+            int status = orderService.selectOrderStatus(userId);
+            return new RestResponse(200,"查询订单状态成功",status);
+
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+
+        return new RestResponse(202,"查询订单状态失败",null);
     };
 
 
 
     @RequestMapping("/commentOrder")
-    public RestResponse commentOrder(Integer userId)
+    public RestResponse commentOrder(HttpServletRequest request,String orderNumber,String comment,int grade)
     {
-        return new RestResponse(200,"ok",null);
+
+        String token = request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
+        int orderId = Integer.parseInt(orderNumber);
+
+        try{
+            orderService.appraise(orderId,comment,userId,grade);
+            return new RestResponse(200,"评论成功",null);
+
+      }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+
+        return new RestResponse(201,"评论失败",null);
     };
 
 

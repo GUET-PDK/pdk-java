@@ -134,11 +134,11 @@ public class UserController extends BaseController{
 
 
     @RequestMapping("/exit")
-    public RestResponse exit(){
+    public RestResponse exit(HttpServletRequest request){
 
 
 //        从token获取用户id，，，，，从token工具类中删除tokon 退出
-
+        String token = request.getHeader("token");
 
         return new RestResponse(200,"ok",null);
 
