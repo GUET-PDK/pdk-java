@@ -1,16 +1,12 @@
-package com.example.demo.service.impl;
+package com.example.demo.service.lsx.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.entity.Address;
-import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.cUserMapper;
-import com.example.demo.service.IUserService;
-import com.example.demo.service.cUserService;
+import com.example.demo.service.lsx.cUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @ClassName cUserServiceImpl

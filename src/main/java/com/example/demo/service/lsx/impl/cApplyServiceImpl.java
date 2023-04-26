@@ -1,9 +1,9 @@
-package com.example.demo.service.impl;
+package com.example.demo.service.lsx.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.entity.Apply;
 import com.example.demo.mapper.cApplyMapper;
-import com.example.demo.service.cApplyService;
+import com.example.demo.service.lsx.cApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

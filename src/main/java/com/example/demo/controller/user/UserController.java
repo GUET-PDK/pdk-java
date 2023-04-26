@@ -3,18 +3,18 @@ package com.example.demo.controller.user;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
-import com.example.demo.service.impl.UserServiceImpl;
-import com.example.demo.service.impl.cApplyServiceImpl;
-import com.example.demo.service.impl.cUserServiceImpl;
+import com.example.demo.service.lsx.impl.cApplyServiceImpl;
+import com.example.demo.service.lsx.impl.cUserServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
 import com.example.demo.utils.upLoads;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName UserController
@@ -55,13 +55,13 @@ public class UserController extends BaseController{
      * @return null
      **/
     @RequestMapping("/updateName")
-    public RestResponse updateName(String name){
-
+    public RestResponse updateName(String name, HttpServletRequest request){
+       String token= request.getHeader("token");
 
 
 //        使用jwt的工具类，，拿到token里面的用户id
-        JwtUtil jwt = new JwtUtil();
-        String userId = jwt.getClaim(token).get("userId");;
+//        JwtUtil jwt = new JwtUtil();
+        String userId = JwtUtil.getClaim(token).get("userId").toString();;
 
 
         User user = new User();
@@ -88,11 +88,11 @@ public class UserController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/updateAddress")
-    public RestResponse updateAddress(@RequestParam("address") String address){
+    public RestResponse updateAddress(@RequestParam("address") String address,HttpServletRequest request){
 
-
+        String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
-        String userId = jwt.getClaim(token).get("userId");;
+        String userId = jwt.getClaim(token).get("userId").toString();;
 
         try{
             Address data= userService.updateAddress(userId,address);
@@ -107,14 +107,14 @@ public class UserController extends BaseController{
 
 
     @RequestMapping("/beRunner")
-    public RestResponse beRunner(String idNumber, String cardNumber, MultipartFile idImage,MultipartFile cardImage){
+    public RestResponse beRunner(String idNumber, String cardNumber, MultipartFile idImage,MultipartFile cardImage,HttpServletRequest request){
 
         String idImagePath = new upLoads().upLoad(idImage,upImagePath,getImagePath);
         String cardImagePath = new upLoads().upLoad(cardImage,upImagePath,getImagePath);
 
-
+        String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
-        int userId = Integer.parseInt(jwt.getClaim(token).get("userId"));;
+        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());;
 
         Apply apply = new Apply(userId,Integer.parseInt(idNumber),Integer.parseInt(cardNumber),idImagePath,cardImagePath);
 

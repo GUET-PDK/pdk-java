@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.lsx;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;

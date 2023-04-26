@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class UserController {
+public class TestController {
 
     @GetMapping("/test")
     @ResponseBody
@@ -21,6 +21,15 @@ public class UserController {
     @PreAuthorize("hasAuthority('下订单2')")
     public String test2(String msg){
         System.out.println("这是吉安市打开贺卡收到客户sdassad卡升级很快的");
+        System.out.println(msg);
+        return msg;
+    }
+
+    @GetMapping("/test3")
+    @ResponseBody
+
+    public String test3(String msg){
+        System.out.println("这是吉安市打开贺卡收到客户sdassad卡升级很fdsf快的");
         System.out.println(msg);
         return msg;
     }

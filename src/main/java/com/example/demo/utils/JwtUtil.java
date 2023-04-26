@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    private static final long EXPIRE = 6000* 1000; //过期时间，现在设置为100分钟
+    private static final long EXPIRE = 6000*300; //过期时间，现在设置为30分钟
 
     //    public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥
     public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥
@@ -48,8 +48,8 @@ public class JwtUtil {
                 // .setSubject("weimi")//主题
                 // .setIssuer("weimi") //发送方
                 .setClaims(claims)  //自定义claims
-//                .setIssuedAt(nowDate)//当前时间
-//                .setExpiration(expireDate) //过期时间
+                .setIssuedAt(nowDate)//当前时间
+                .setExpiration(expireDate) //过期时间
                 .signWith(key)//签名算法和key
                 .compact();
     }
@@ -70,8 +70,8 @@ public class JwtUtil {
                 // .setSubject("weimi")//主题
                 //    .setIssuer("weimi") //发送方
                 .setClaims(claims)  //自定义claims
-//                .setIssuedAt(nowDate)//当前时间
-//                .setExpiration(expireDate) //过期时间
+                .setIssuedAt(nowDate)//当前时间
+                .setExpiration(expireDate) //过期时间
                 .signWith(key)//签名算法和key
                 .compact();
     }

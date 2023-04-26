@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.lsx;
 
 import com.example.demo.entity.Apply;
 import org.springframework.stereotype.Service;

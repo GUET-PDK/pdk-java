@@ -40,7 +40,7 @@ public class WxAuthenticationnSuccessHandler implements AuthenticationSuccessHan
 
        String token= JwtUtil.generate(jwtMap);
 
-       redisCache.setCacheObject("login_"+userId,authentication.getAuthorities(),30, TimeUnit.MINUTES);
+    redisCache.setCacheObject("login_"+token,authentication.getAuthorities(),30, TimeUnit.MINUTES);
         Map result = new HashMap();
         result.put("code", 200);
 //        result.put("codeRtn", false);

@@ -40,6 +40,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
          return;
         }
+        System.out.println("这是旧的token   "+token);
         if(!JwtUtil.verify(token)){
 
             response.setContentType("application/json; charset=utf-8");
@@ -54,11 +55,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String json = objectMapper.writeValueAsString(result);
             response.getWriter().write(json);
             response.getWriter().flush();
+            return;
         }else {
             //从redis中获取用户信息
             Claims claims=JwtUtil.getClaim(token);
             String userId=claims.get("userId").toString();
-            Object object= redisCache.getCacheObject("login_"+userId);
+            Object object= redisCache.getCacheObject("login_"+token);
             if(object==null){
                 //todo 这是登录过期的，要重新登录
                 System.out.println("已经过期了");
@@ -74,25 +76,33 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 String json = objectMapper.writeValueAsString(result);
                 response.getWriter().write(json);
                 response.getWriter().flush();
+                return;
             }
-          if(!redisCache.expire("login_"+userId,30,TimeUnit.MINUTES)){
-              response.setContentType("application/json; charset=utf-8");
-              response.setCharacterEncoding("UTF-8");
 
-              Map result = new HashMap();
-              result.put("code", 505);
-//        result.put("codeRtn", false);
-              // 错误信息
-              result.put("errorMsg","设置redis过期时间失败");
-              ObjectMapper objectMapper= new ObjectMapper();
-              String json = objectMapper.writeValueAsString(result);
-              response.getWriter().write(json);
-              response.getWriter().flush();
-          }
-          Map map=new HashMap();
-          map.put("userId",userId);
-           token= JwtUtil.generate(map);
-           response.setHeader("token",token);
+
+
+              redisCache.deleteObject("login_"+token);
+              Map map=new HashMap();
+              map.put("userId",userId);
+              token= JwtUtil.generate(map);
+            System.out.println("这是新的token  "+token);
+              redisCache.setCacheObject("login_"+token,object,30,TimeUnit.MINUTES);
+              response.setHeader("token",token);
+        /*      response.setContentType("application/json; charset=utf-8");
+              response.setCharacterEncoding("UTF-8");*/
+//
+//              Map result = new HashMap();
+//              result.put("code", 505);
+////        result.put("codeRtn", false);
+//              // 错误信息
+//              result.put("errorMsg","设置redis过期时间失败");
+//              ObjectMapper objectMapper= new ObjectMapper();
+//              String json = objectMapper.writeValueAsString(result);
+//              response.getWriter().write(json);
+//              response.getWriter().flush();
+
+//
+//           response.setHeader("token",token);
 //            List<Record> msgList = JSON.parseArray(msgEncap.getString("msgList"), Record.class);
 //            List<GrantedAuthority> collection= JSON.parseArray(JSON.toJSONString(object),List.class);
             Collection<GrantedAuthority> collection=(Collection<GrantedAuthority>)object;
