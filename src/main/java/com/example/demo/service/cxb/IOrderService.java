@@ -1,22 +1,26 @@
 package com.example.demo.service.cxb;
 
 import com.example.demo.entity.Order;
+import com.example.demo.vo.OrderVo;
 
 import java.util.List;
 
 public interface IOrderService {
     /**
-     * 查看自己以往完成的历史订单
+     * 查看自己接的订单
      * @param userId
      * @return
      */
-    List<Order> getMyOrder(String userId);
+    List<OrderVo> getMyOrder(Integer orderStatus,String userId);
 
     /**
      * 获取所有正在发布的订单
      * @return
      */
-    List<Order> getAllOrder();
+    List<OrderVo> getAllOrder(Integer orderTYpe);
 
     boolean confirmOrder(int orderId,String userId);
+
+    Object getOrderDetail(int orderId,String userId);
+
 }

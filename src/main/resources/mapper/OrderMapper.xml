@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.OrderMapper">
+
+    <select id="selectOrderVo" resultType="com.example.demo.vo.OrderVo">
+        SELECT a.order_id as orderId,a.order_type as orderType,
+               CONCAT_WS('',b.shipping_address,c.shipping_address,d.shipping_address,e.shipping_address) as shippingAddress,
+               CONCAT_WS('',b.remark,c.remark,d.remark,e.remark) as remark,
+               CONCAT_WS('',b.price,c.price,d.price,e.price) as price
+        from sys_order a
+                 left join sys_order_sent b on a.order_id=b.order_id
+                 left join sys_order_takeaway c on a.order_id=c.order_id
+                 left join sys_order_substitution d on a.order_id=d.order_id
+                 left join sys_order_universal_service e on a.order_id=e.order_id
+        <where>
+            <if test="orderType!=null and orderType in (0,1,2,3)">
+                a.order_type=#{orderType}
+            </if>
+            <if test="userId!=null">
+                and a.take_user_id=#{userId}
+            </if>
+
+            <if test="orderStatus!=null">
+                and a.order_status=#{orderStatus}
+            </if>
+        </where>
+    </select>
+    <select id="selectSent" resultType="com.example.demo.entity.orderDetail.Sent">
+        select shipping_address as shippingAddress,recipient_address as recipientAddress,
+               type,remark,courier_size as courierSize ,price
+                from sys_order_sent
+                where order_id=#{orderId}
+    </select>
+    <select id="selectTakeaway" resultType="com.example.demo.entity.orderDetail.Takeaway">
+        select shipping_address as shippingAddress,pick_up_positon as pickUpPosition,
+               remark,price
+from sys_order_takeaway
+where order_id=#{orderId}
+    </select>
+
+    <select id="selectUniversalService" resultType="com.example.demo.entity.orderDetail.UniversalService">
+            select service_description as serviceDescription,remark,price,
+                   shipping_address as shippingAddress
+from sys_order_universal_service
+where order_id=#{orderId}
+    </select>
+    <select id="selectSubstitution" resultType="com.example.demo.entity.orderDetail.Substitution">
+        select shipping_address as shippingAddress,delivery_time_1 as deliveryTime1,
+               delivery_time_2 as deliveryTime2,
+               pickup_code as pickupCode,
+               remark,courier_size as courierSize,price
+        from sys_order_substitution
+where order_id=#{orderId}
+    </select>
+</mapper>

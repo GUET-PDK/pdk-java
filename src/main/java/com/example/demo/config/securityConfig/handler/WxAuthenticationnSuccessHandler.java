@@ -48,7 +48,7 @@ public class WxAuthenticationnSuccessHandler implements AuthenticationSuccessHan
         result.put("Msg", "登录成功");
 
         String json = objectMapper.writeValueAsString(result);
-        response.setContentType("text/json;charset=utf-8");
+        response.setContentType("application/json;charset=utf-8");
         response.setHeader("token",token);
         response.getWriter().write(json);
     }
