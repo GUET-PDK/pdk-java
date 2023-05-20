@@ -113,7 +113,7 @@ public class RunnerOrderController extends BaseController {
     @PostMapping("revocation")
     public RestResponse revocation(HttpServletRequest request){
 //todo 这里牵连出一大部分问题，我打算中间表撤销骑手那块直接删了算了，还有关于用户表状态需要更改的问题后面还需要更新sql语句来搞登录的东西
-
+return null;
     }
 
 }

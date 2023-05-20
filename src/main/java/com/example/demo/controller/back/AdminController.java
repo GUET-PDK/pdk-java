@@ -1,6 +1,7 @@
 package com.example.demo.controller.back;
 
 import com.example.demo.service.jyc.inters.AdminService;
+import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,14 @@ public class AdminController {
     @Resource(name = "adminService")
     private AdminService adminService;
 
+    /**
+     * 登录获取验证码
+     */
+
+    @RequestMapping("/getCode")
+    public RestResponse getCode(String phone){
+return null;
+    }
     /**
      * 管理员登陆
      * @param name
