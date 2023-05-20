@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.AdminRunnerMapper">
+    <select id="countRunner" resultType="Integer">
+        select
+            count(*)
+        from
+            middle_user_role
+        where
+            role_id = 3;
+    </select>
+
+    <select id="countDayToDay" resultType="Integer" >
+        select
+            count(distinct a.user_id)
+        from
+            back_user_login a
+                left join
+            middle_user_role b
+            on
+                a.user_id = b.user_id
+        where
+            b.role_id = 3
+          and
+            a.login_time between #{start} and #{end}
+    </select>
+
+</mapper>

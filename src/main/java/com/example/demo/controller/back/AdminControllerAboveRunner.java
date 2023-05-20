@@ -1,6 +1,6 @@
 package com.example.demo.controller.back;
 
-import com.example.demo.service.jyc.inters.AdminService;
+import com.example.demo.service.jyc.inters.AdminUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 public class AdminControllerAboveRunner {
 
     @Resource(name = "adminService")
-    private AdminService adminService;
+    private AdminUser adminUser;
 
     @RequestMapping("/allowRunner")
     public void allowRunner(String username){
