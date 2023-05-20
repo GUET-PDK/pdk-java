@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(weChatAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling().accessDeniedHandler(wxAccessDeniedHandler);
-        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+       // http.addFilterBefore(jwtAuthenticat'ionTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

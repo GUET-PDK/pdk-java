@@ -5,6 +5,7 @@ import com.example.demo.config.securityConfig.token.WeChatAuthenticationToken;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.cxb.IUserService;
+import com.example.demo.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,8 @@ public class WeChatAuthenticationProvider implements AuthenticationProvider {
     UserMapper userMapper;
 
 
+    @Autowired
+    RedisCache redisCache;
     @Autowired
     IUserService userService;
     @Override
@@ -57,6 +60,7 @@ public class WeChatAuthenticationProvider implements AuthenticationProvider {
             userService.addNewUser(user);
            permissionSet = userMapper.selectPermissionByUserId(userId);
         }else {
+            //todo 后期可能还得设置只能登陆一次
             permissionSet = userMapper.selectPermissionByUserId(list.get(0).getUserId());
             resultUserId=list.get(0).getUserId();
         }

@@ -93,9 +93,9 @@ public class WeChatAuthenticationFilter extends AbstractAuthenticationProcessing
         System.out.println("你好 大师傅但是");
         JSONObject jsonObject=JSONObject.parseObject(content);
         String openid=jsonObject.getString("openid");
-//        if(openid==null){
-//            throw new BadCredentialsException("uid or openid is null.");
-//        }
+        if(openid==null){
+            throw new BadCredentialsException("openid没拿到，微信发送失败了");
+        }
 //        openid="skadjsahdsdasd+nnnnn";
         //todo  后面将要检查非空什么的
         WeChatAuthenticationToken authRequest = new WeChatAuthenticationToken(openid);
