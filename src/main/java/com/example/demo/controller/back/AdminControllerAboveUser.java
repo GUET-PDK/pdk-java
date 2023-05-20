@@ -49,10 +49,8 @@ public class AdminControllerAboveUser {
         Integer countRunner = adminRunner.countRunner();
         map.put("count",countUser);
         map.put("runnerCount",countRunner);
-
-        RestResponse success = RestResponse.success(map);
-        System.out.println(success);
-        return success;
+        //System.out.println(success);
+        return (RestResponse<Map<String,Integer>>) RestResponse.success(map);
     }
 
     @GetMapping("getActiveCount")
@@ -70,10 +68,7 @@ public class AdminControllerAboveUser {
             map.put("runnerCount",activeRunnerNum.get(i));
             data.add(map);
         }
-
-        RestResponse success = RestResponse.success(data);
-
-        return success;
+        return (RestResponse<List<Map<String,Integer>>>) RestResponse.success(data);
     }
 
 
