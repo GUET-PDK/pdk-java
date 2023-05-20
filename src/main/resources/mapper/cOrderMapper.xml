@@ -16,4 +16,8 @@ values (#{comment},#{grade},#{orderId},#{userId})
         select order_status from sys_order where user_id = #{userId}
     </select>
 
+    <select id="selectOneById" resultType="com.example.demo.entity.Order">
+        select * from sys_order where user_id = #{userId} and order_id = #{orderId}
+    </select>
+
 </mapper>

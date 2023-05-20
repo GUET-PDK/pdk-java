@@ -55,7 +55,7 @@ public class UserController extends BaseController{
      * @return null
      **/
     @RequestMapping("/updateName")
-    public RestResponse updateName(String name, HttpServletRequest request){
+    public RestResponse updateName(String userName,String userPhone,String userAvator, HttpServletRequest request){
        String token= request.getHeader("token");
 
 
@@ -66,16 +66,27 @@ public class UserController extends BaseController{
 
         User user = new User();
         user.setUserId(userId);
-        user.setUserName(name);
-        Boolean flag = userService.updateById(user);
-        if(flag){
+        user.setUserName(userName);
+        user.setUserAvatar(userAvator);
+        user.setUserPhone(userPhone);
+
+        int flag = userService.MyUpdateById(user);
+        log.debug("flag=",flag);
+        if(flag>0){
 
             return new RestResponse(200,"更新用户成功",null);
         }
 
+        else {
 
-        return new RestResponse(500,"更新用户名失败",null);
-    };
+
+            return new RestResponse(500, "更新用户名失败", null);
+        }
+        };
+
+
+
+
 
 
     /**
@@ -88,15 +99,15 @@ public class UserController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/updateAddress")
-    public RestResponse updateAddress(@RequestParam("address") String address,HttpServletRequest request){
+    public RestResponse updateAddress(@RequestParam("address") String address,String addressPhone,String addressName,HttpServletRequest request){
 
         String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
         String userId = jwt.getClaim(token).get("userId").toString();;
 
         try{
-            Address data= userService.updateAddress(userId,address);
-            return new RestResponse(200,"更新地址成功",data);
+            Address data= userService.updateAddress(userId,address,addressPhone,addressName);
+            return new RestResponse(200,"更新地址成功",null);
         }catch (RuntimeException e){
             e.printStackTrace();
         }
@@ -104,6 +115,10 @@ public class UserController extends BaseController{
         return new RestResponse(200,"更新地址失败",null);
 
     };
+
+
+
+
 
 
     @RequestMapping("/beRunner")
@@ -120,7 +135,7 @@ public class UserController extends BaseController{
 
         try{
             applyService.insert(apply);
-            return new RestResponse(200,"申请成功",null);
+            return new RestResponse(200,"申请已提交，待审核",null);
         }catch (RuntimeException e)
         {
             //后面改成自己的同意异常处理
@@ -133,14 +148,23 @@ public class UserController extends BaseController{
 
 
 
-    @RequestMapping("/exit")
-    public RestResponse exit(HttpServletRequest request){
+    @RequestMapping("/deleteAddress")
+    public RestResponse deleteAddress(HttpServletRequest request,String addressId ){
 
 
-//        从token获取用户id，，，，，从token工具类中删除tokon 退出
-        String token = request.getHeader("token");
+        String token= request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
 
-        return new RestResponse(200,"ok",null);
+
+        try {
+            userService.deleteAddress(addressId,userId);
+            return new RestResponse(200,"ok",null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
+        }
+
 
     };
 

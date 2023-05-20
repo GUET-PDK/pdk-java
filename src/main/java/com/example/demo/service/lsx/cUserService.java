@@ -8,6 +8,8 @@ import com.example.demo.entity.User;
 import com.example.demo.mapper.cUserMapper;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @ClassName ctfliar
  * @Description TODO
@@ -18,8 +20,17 @@ import org.springframework.web.multipart.MultipartFile;
 public interface cUserService extends IService<User>{
 
 
-    Address updateAddress(String userId, String address);
+    Address updateAddress(String userId, String address,String addressPhone, String addressName);
 
+    public int MyUpdateById(User entity);
+
+
+    Address deleteAddress(String addressId,String userId);
+
+
+    String selecetOpenId(String userId);
+
+    List<Address> selectAddressListByUserId(int userId);
 
 
 }

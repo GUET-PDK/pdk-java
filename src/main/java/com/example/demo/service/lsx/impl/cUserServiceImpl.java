@@ -8,6 +8,8 @@ import com.example.demo.service.lsx.cUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName cUserServiceImpl
  * @Description TODO
@@ -22,14 +24,29 @@ public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements c
     cUserMapper userMapper;
 
     @Override
-    public Address updateAddress(String userId, String address) {
-        return userMapper.updateAddress(userId,address);
+    public Address updateAddress(String userId, String address,String addressPhone,String addressName) {
+
+        return userMapper.updateAddress(userId,address,addressPhone,addressName);
+    }
+
+
+    @Override
+    public int MyUpdateById(User entity) {
+        return userMapper.updateById(entity);
     }
 
     @Override
-    public boolean updateById(User entity) {
-        return super.updateById(entity);
+    public Address deleteAddress(String addressId, String userId) {
+        return userMapper.deleteAddress(addressId,userId);
     }
 
+    @Override
+    public String selecetOpenId(String userId) {
+        return userMapper.selectOpenId(userId);
+    }
 
+    @Override
+    public List<Address> selectAddressListByUserId(int userId) {
+        return userMapper.selectAddressListByUserId(userId);
+    }
 }

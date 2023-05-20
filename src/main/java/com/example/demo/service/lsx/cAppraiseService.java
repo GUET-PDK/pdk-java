@@ -16,10 +16,18 @@ import java.util.List;
 public interface cAppraiseService {
 
 
-    List<Order> selectList(Wrapper<Order> queryWrapper);
+
+    Order selectOneById(Integer OrderId,Integer userId);
+    List<List<Integer>> selectOrderIdAndOrder(Integer userId,Integer orderStatus);
+    List<Order> selectList(String tableName,Integer orderId);
     int insert(Order entity);
     int selectOrderStatus(int userId);
-    int appraise(int orderId,String comment,int userId,int grade);
+    int appraise(Integer orderId,String comment,int userId,Integer grade);
+    int updateOrderStatusByOrderId(Integer orderId,int userId,int status);
+
+    List<Order> selectOrderListForCount(int userId);
+
+
 
 
 }

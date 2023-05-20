@@ -5,13 +5,17 @@ import com.example.demo.entity.Order;
 import com.example.demo.service.lsx.impl.cOrderServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,35 +30,93 @@ import java.util.List;
 public class UserOrderController extends BaseController{
 
 
+    @Autowired
     private cOrderServiceImpl orderService;
+
+
+    @Value("${orderType.publish}")
+    private int publishStatus;
+    @Value("${orderType.dispose}")
+    private int disposeStatus;
+    @Value("${orderType.finish}")
+    private int finishStatus;
+
+
+    @Value("${orderStatus.orderSent}")
+    private int orderSentType;
+    @Value("${orderStatus.substitution}")
+    private int substitutionType;
+    @Value("${orderStatus.takeAway}")
+    private int takeAwayType;
+    @Value("${orderStatus.universal}")
+    private int universalType;
+
+
 
 
 
     /**
      * @Author ctfliar
-     * @Description //通过用户id查询历史订单
+     * @Description //用户查询不同装状态的订单
      * @Date 21:14 2023/4/25
      * @Param
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/selectOrder")
-    public RestResponse selectOrder(HttpServletRequest request)
+    public RestResponse selectOrder(HttpServletRequest request,Integer status)
     {
-String token=request.getHeader("token");
+
+        String token=request.getHeader("token");
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
-        String userId = jwt.getClaim(token).get("userId").toString();
+        Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
 
-//        自定义的什么状态是历史订单，，加到构造器里面
+
+        //status分别表示未结单，配送中，已完成三种状态
+        //示例值:
+        //0或1或2
 
 
         try{
-            int status = 0;
-            QueryWrapper<Order> qw = new QueryWrapper<Order>();
-            qw.eq("user_id",userId);
-            qw.eq("order_status",status);
-            List<Order> list = orderService.selectList(qw);
+
+            //通过status，和userId找到orderType(对应不同的表)和orderId,返回的是一个列表
+            List<List<Integer>> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId,status);
+
+            List<Object> list = new ArrayList<>();
+            for(int i=0;i<orderTypeAndOrderId.size();i++)
+            {
+                //oderType,0,1,2,3对应下面四种类型的订单表,
+
+                List<Integer> temp = orderTypeAndOrderId.get(i);
+                Integer orderType = temp.get(0);
+                Integer orderId = temp.get(1);
+
+
+//                QueryWrapper<Order> qw = new QueryWrapper<Order>();
+//                qw.eq("order_id",orderId);
+                String tableName;
+//                写一个判断，，，查出来的是什么数字的时候直接通过这样指定表名字，，然后进行直接判断
+                if(orderType.equals(0))
+                {
+                     tableName = "sys_order_sent";
+                }
+                else if(orderType.equals(1))
+                {
+                     tableName = "sys_order_substitution";
+                }
+                else if(orderType.equals(2))
+                {
+                     tableName = "sys_order_takeaway";
+                }
+                else {
+                     tableName = "sys_order_universal_service";
+                }
+
+                list.add(orderService.selectList(tableName,orderId));
+
+            }
+
             return new RestResponse(200,"查询订单成功",list);
         }catch (RuntimeException e){
             e.printStackTrace();
@@ -67,111 +129,79 @@ String token=request.getHeader("token");
 
 
 
-
-
-
-
-
-    @RequestMapping("/publishOrder")
-    public RestResponse publishOrder(
-                                     String orderType,
-                                     String orderDescribe,
-                                     String publishTime,
-                                     String finishTime,
-                                     String orderAddress,
-                                     String money,
-                                     String myAddress,
-                                     HttpServletRequest request)
+    /**
+     * @Author ctfliar
+     * @Description //获取自己的某个订单的详细数据
+     * @Date 11:06 2023/5/18
+     * @Param
+     * @param request
+     * @param orderId
+     * @return
+     * @return com.example.demo.utils.RestResponse
+     **/
+    @RequestMapping("/getOrderDetail")
+    public RestResponse getOrderDetail(HttpServletRequest request,Integer orderId)
     {
 
 
-//        使用jwt的工具类，，拿到token里面的用户id
         String token=request.getHeader("token");
+//        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
-        String userId = jwt.getClaim(token).get("userId").toString();
+        Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
 
-        int orderType2 = Integer.parseInt(orderType);
-//        订单已完成状态为2，未完成状态为1，未接收为0
-
-        int orderStatus = 0;
-
-        long time = System.currentTimeMillis();
-        Date createTime = new Date(time);
-
-//        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
-////        System.out.println(dateFormat.format(date));
-
-        Date startTime = createTime;
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
-        sdf.setLenient(false);
-
-        Date fTime;
+        QueryWrapper<Order> qw = new QueryWrapper<Order>();
+        qw.eq("user_id",userId);
+        qw.eq("order_id",orderId);
 
         try {
-            Date endTime = sdf.parse(finishTime);
-            fTime = endTime;
-
-        }catch (ParseException e) {
+            Order order = orderService.selectOneById(orderId,userId);
+            return new RestResponse(200,"查询数据成功",order);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
 
-        Order entity  = new Order(
-                userId,
-                orderType2,
-                orderStatus,
-                createTime,
-                startTime,
-                fTime,
-                myAddress,
-                orderAddress,
-                orderDescribe
-                );
-
-        try{
-            orderService.insert(entity);
-            return new RestResponse(200,"发布成功",null);
-        }catch(RuntimeException e){
-            e.printStackTrace();
-        }
-
-
-        return new RestResponse(200,"发布订单失败",null);
     };
 
 
 
 
-    @RequestMapping("/selectOrderStatus")
-    public RestResponse selectOrderStatus(HttpServletRequest request)
-    {
-        String token = request.getHeader("token");
-        JwtUtil jwt = new JwtUtil();
-        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
-
-        try{
-            int status = orderService.selectOrderStatus(userId);
-            return new RestResponse(200,"查询订单状态成功",status);
-
-        }catch (RuntimeException e){
-            e.printStackTrace();
-        }
-
-        return new RestResponse(202,"查询订单状态失败",null);
-    };
-
-
-
+    /**
+     * @Author ctfliar
+     * @Description //用户点击完成订单并评论，
+     * 用户点击这个来将配送中的订单变成已完成，同时并可以选择是否评价和打分，
+     * 如果没有评价或者打分，那就由后端默认打分为8分
+     * @Date 11:15 2023/5/18
+     * @Param
+     * @param request
+     * @param orderId
+     * @param comment
+     * @param grade
+     * @return
+     * @return com.example.demo.utils.RestResponse
+     **/
     @RequestMapping("/commentOrder")
-    public RestResponse commentOrder(HttpServletRequest request,String orderNumber,String comment,int grade)
+    public RestResponse commentOrder(HttpServletRequest request,Integer orderId,String comment,Integer grade)
     {
 
         String token = request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
         int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
-        int orderId = Integer.parseInt(orderNumber);
+
+
+
+        //将订单状态变成完成,,定义订单完成的状态是2，，，，定义订单在执行中的状态是1，已经下单的状态是0
+        int status = 2;
+        orderService.updateOrderStatusByOrderId(orderId,userId,status);
+
+
+//        用户是否评价和打分，没有评价或者打分的话，就系统默认
+        if(grade==null){
+            grade = 8;//默认八分
+        }
+        if(comment.equals(null)){
+            comment="该用户暂时无评论";
+        }
 
         try{
             orderService.appraise(orderId,comment,userId,grade);
@@ -183,6 +213,63 @@ String token=request.getHeader("token");
 
         return new RestResponse(201,"评论失败",null);
     };
+
+
+
+
+
+
+    @RequestMapping("/substitutionPublishOrder")
+    public RestResponse substitutionPublishOrder(
+            String shippingAddress,
+            String deliveryTime1,
+            String deliveryTime2,
+            String remark,
+            List<MultipartFile> pickupCode,   //，文件数组取件码截图
+            int price,
+            String courierSize,
+            HttpServletRequest request)
+    {
+
+//        使用jwt的工具类，，拿到token里面的用户id
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+
+        //存入两个表,,一般订单表
+
+        int orderType = substitutionType;
+        int orderStatus = publishStatus;
+        SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
+        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date updateTime = createTime;
+
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setOrderStatus(orderStatus);
+        order.setOrderType(orderType);
+        order.setCreateTime(createTime);
+        order.setUpdateTime(updateTime);
+
+
+        int result = orderService.insert(order);
+        //插入数据，id自动递增，赋值
+        int orderId = order.getOrderId();
+        if(result>0){
+            orderId = order.getOrderId();
+        }
+
+
+        //获取返回之后的orderId之后插入第二张表
+
+
+
+        return new RestResponse(200,"发布订单失败",null);
+    };
+
+
+
 
 
 

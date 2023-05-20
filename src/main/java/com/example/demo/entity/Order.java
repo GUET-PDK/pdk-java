@@ -25,8 +25,6 @@ public class Order implements Serializable {
     private int orderStatus;
     private Date createTime;
     private Date updateTime;
-    private Date startTime;
-    private Date finishTime;
 
     @TableField("address_1")
     private String address1;
@@ -36,13 +34,11 @@ public class Order implements Serializable {
     private String orderDescription;
 
 
-    public Order(String userId, int orderType, int orderStatus, Date createTime, Date startTime, Date finishTime, String address1, String address2, String orderDescription) {
+    public Order(String userId, int orderType, int orderStatus, Date createTime, String address1, String address2, String orderDescription) {
         this.userId = userId;
         this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.createTime = createTime;
-        this.startTime = startTime;
-        this.finishTime = finishTime;
         this.address1 = address1;
         this.address2 = address2;
         this.orderDescription = orderDescription;
