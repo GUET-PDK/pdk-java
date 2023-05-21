@@ -22,4 +22,29 @@
             a.login_time between #{start} and #{end}
     </select>
 
+    <select id="selectAllUsers" resultType="com.example.demo.entity.User">
+        select
+            *
+        from
+            sys_user;
+    </select>
+
+    <update id="updateUserStatus" timeout="1">
+        update
+            sys_user
+        set
+            status = #{status}
+        where
+            user_id = #{userId}
+    </update>
+
+    <select id="selectUserById"  resultType="com/example/demo/entity/User">
+        select
+            *
+        from
+            sys_user
+        where
+            user_id = #{userId}
+    </select>
+
 </mapper>

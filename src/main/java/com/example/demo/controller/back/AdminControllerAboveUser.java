@@ -1,21 +1,14 @@
 package com.example.demo.controller.back;
 
 import com.example.demo.entity.User;
-import com.example.demo.service.jyc.inters.AdminOrder;
 import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName AdminControllerAboveUser
@@ -53,8 +46,13 @@ public class AdminControllerAboveUser {
         return (RestResponse<Map<String,Integer>>) RestResponse.success(map);
     }
 
+    /**
+     * 统计上一周用户和骑手的活跃度
+     *
+     * @return RestResponse<List < Map < String, Integer>>>
+     */
     @GetMapping("getActiveCount")
-    public RestResponse<List<Map<String,Integer>>> getActiveCount(){
+    public RestResponse getActiveCount(){
 
         List<Map<String,Integer>> data = new ArrayList<>();
         ArrayList<Integer> activeUserNum = adminUser.getActiveUserNum();
@@ -71,38 +69,45 @@ public class AdminControllerAboveUser {
         return (RestResponse<List<Map<String,Integer>>>) RestResponse.success(data);
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * 获取所有用户信息
      */
-    @RequestMapping("/getUserMessage")
-    public void getAllUsers(){
-
+    @GetMapping("/getUserMessage")
+    public RestResponse getAllUsers(){
+        List<User> allUsers = adminUser.getAllUsers();
+        RestResponse success = RestResponse.success(allUsers);
+        return success;
     }
 
     /**
      * 管理员封禁用户账号
-     * @param username 用户名
+     * @param userId 用户Id
      */
-    @RequestMapping("/banUser")
-    public void banUser(String username){
-
+    @PostMapping("/banUser")
+    public RestResponse banUser(String userId){
+        RestResponse response = RestResponse.success(null);
+        try {
+            adminUser.banUser(userId,1);
+        } catch (Exception e) {
+            response.setCode(666);
+            response.setMsg(e.getMessage());
+        }
+        return response;
     }
 
     /**
      * 管理员解除用户封禁
-     * @param username 用户名
+     * @param userId 用户名
      */
-    @RequestMapping("/pinUser")
-    public void pinUser(String username){
-
+    @PostMapping("/pinUser")
+    public RestResponse pinUser(String userId){
+        RestResponse response = RestResponse.success(null);
+        try {
+            adminUser.pinUser(userId,0);
+        } catch (Exception e) {
+            response.setCode(666);
+            response.setMsg(e.getMessage());
+        }
+        return response;
     }
 }

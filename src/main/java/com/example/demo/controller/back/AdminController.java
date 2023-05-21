@@ -1,6 +1,6 @@
 package com.example.demo.controller.back;
 
-import com.example.demo.service.jyc.inters.AdminService;
+import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @RequestMapping("/admin")
 public class AdminController {
     @Resource(name = "adminService")
-    private AdminService adminService;
+    private AdminUser adminService;
 
     /**
      * 登录获取验证码

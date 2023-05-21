@@ -1,9 +1,10 @@
 package com.example.demo.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Date;
-
+@Mapper
 public interface AdminRunnerMapper {
     Integer countRunner();
 
