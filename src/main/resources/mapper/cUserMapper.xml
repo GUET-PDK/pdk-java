@@ -4,8 +4,16 @@
 
 <mapper namespace="com.example.demo.mapper.cUserMapper">
     <update id="updateAddress">
-        update sys_user_address set address_description = #{address} where user_id = #{userId}
+        update sys_user_address set address_description = #{address},
+                                     address_phone = #{addressPhone},
+                                    address_name = #{addressName}
+                                where user_id = #{userId}
     </update>
+
+
+    <delete id="deleteAddress">
+        delete from sys_user_address where address_id = #{addressId} and user_id=#{userId}
+    </delete>
 
 
 </mapper>

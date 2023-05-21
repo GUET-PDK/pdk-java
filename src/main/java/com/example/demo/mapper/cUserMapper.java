@@ -6,6 +6,9 @@ import com.example.demo.entity.Address;
 import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @ClassName ctfliar
@@ -18,11 +21,21 @@ import org.apache.ibatis.annotations.Mapper;
 public interface cUserMapper extends BaseMapper<User> {
 
 
-    Address updateAddress(String userId,String address);
+
+//    userId,address,addressPhone,addressName
+    Address updateAddress(String userId,String address,String addressPhone,String addressName);
+
+    Address deleteAddress(String addressId,String userId);
 
 
+    @Select("select open_id from sys_user where user_id = #{userId}")
+    String selectOpenId(String userId);
 
 
-
+    @Select("select address_id," +
+            "address_description," +
+            "address_name,address_phone " +
+            "from sys_user_address where user_id = #{userId}}")
+    List<Address> selectAddressListByUserId(int userId);
 
 }

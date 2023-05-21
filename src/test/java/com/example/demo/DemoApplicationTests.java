@@ -15,7 +15,12 @@ class DemoApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(RoleEnum.普通用户.name());
+
+        int a=0;
+        Integer b = 1;
+        a = b;
+        System.out.println(a);
+
     }
 
     @Test
