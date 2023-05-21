@@ -24,7 +24,7 @@ import java.util.*;
 @RequestMapping("/admin")
 public class AdminControllerAboveUser {
 
-    @Resource(name = "adminService")
+    @Resource(name = "adminUser")
     private AdminUser adminUser;
 
     @Resource(name = "adminRunner")
