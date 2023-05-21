@@ -29,7 +29,7 @@
             sys_user;
     </select>
 
-    <update id="updateUserStatus" timeout="1">
+    <update id="updateUserStatus">
         update
             sys_user
         set

@@ -19,7 +19,7 @@ import java.util.List;
  * @Date 2023/5/3
  * @Version 1.0
  **/
-@Service("adminService")
+@Service("adminUser")
 public class AdminUserImpl implements AdminUser {
     @Resource
     AdminUserMapper adminUserMapper;

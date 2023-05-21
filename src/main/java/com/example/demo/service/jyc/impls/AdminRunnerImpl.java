@@ -1,15 +1,20 @@
 package com.example.demo.service.jyc.impls;
 
+import com.example.demo.dto.ApplyMessage;
 import com.example.demo.mapper.AdminRunnerMapper;
 import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.utils.SqlDateLastWeekListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AdminRunnerImpl
@@ -53,5 +58,47 @@ public class AdminRunnerImpl implements AdminRunner {
         activeRunnerNum.add(lastSundayNum);
 
         return activeRunnerNum;
+    }
+
+    @Override
+    public Map<String,Integer> countApplication() {
+        HashMap<String, Integer> map = new HashMap<>();
+        // 0--未处理  1--同意  2--不同意
+        map.put("allow",adminRunnerMapper.countApplicationByStatus(1));
+        map.put("disAllow",adminRunnerMapper.countApplicationByStatus(2));
+        map.put("notProcessed",adminRunnerMapper.countApplicationByStatus(0));
+        return map;
+    }
+
+    @Override
+    public ApplyMessage getRunnerApplyMessage(String userId) {
+        return adminRunnerMapper.selectApplyByUserId(userId);
+    }
+
+    /**
+     * 通过管理员的骑手申请步骤：
+     *      申请表申请记录的状态改为通过
+     *      用户角色表通过用户id更改角色属性
+     * @param id 用户id
+     * @return 影响的记录条数
+     */
+    @Override
+    @Transactional
+    public int allowRunner(Integer id) {
+        int i1 = adminRunnerMapper.updateApplyStatus(id, 1);
+        int i2 = adminRunnerMapper.updateRoleIdByUserId(adminRunnerMapper.selectUserIdById(id));
+        if ((i1+i2)==2) {
+            return i1 + i2;
+        }
+        return 0;
+    }
+
+    @Override
+    public int disAgreeRunner(Integer id) {
+        int i = adminRunnerMapper.updateApplyStatus(id, 2);
+        if (i==1) {
+            return i;
+        }
+        return 0;
     }
 }
