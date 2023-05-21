@@ -8,5 +8,10 @@ import java.util.Collection;
 public class PhoneAuthenticationToken extends UsernamePasswordAuthenticationToken {
     public PhoneAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(principal, credentials, authorities);
+
+    }
+
+    public PhoneAuthenticationToken(Object principal, Object credentials) {
+        super(principal, credentials);
     }
 }
