@@ -28,11 +28,11 @@ public class WxAuthenticationFailureHandler implements AuthenticationFailureHand
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException, IOException {
         // 返回json数据
         Map result = new HashMap();
-        result.put("code", 6000);
+        result.put("code", 6050);
 //        result.put("codeRtn", false);
         // 错误信息
         result.put("errorMsg", exception.getMessage());
-
+        exception.printStackTrace();;
         String json = objectMapper.writeValueAsString(result);
         response.setContentType("text/json;charset=utf-8");
         response.getWriter().write(json);

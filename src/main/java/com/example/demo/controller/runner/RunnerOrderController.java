@@ -5,10 +5,12 @@ import com.example.demo.controller.user.BaseController;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.User;
 import com.example.demo.service.cxb.IOrderService;
+import com.example.demo.service.cxb.IUserService;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
 import com.example.demo.vo.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/runner")
@@ -25,12 +29,15 @@ public class RunnerOrderController extends BaseController {
     @Autowired
     IOrderService orderService;
 
+    @Autowired
+    IUserService userService;
     /**
      * 获取自己已接取过的订单
      * @param request
      * @return
      */
     @GetMapping("/selectNowOrder")
+    @PreAuthorize("hasAuthority('接单')")
     public RestResponse getOrders(Integer orderStatus,HttpServletRequest request){
         if(orderStatus!=null){
             if(orderStatus>2||orderStatus<1){
@@ -53,6 +60,7 @@ public class RunnerOrderController extends BaseController {
      * @return
      */
     @GetMapping("/getOrder")
+    @PreAuthorize("hasAuthority('接单')")
     public RestResponse getAllOrder(Integer orderType){
         if(orderType!=null){
             if(orderType<0||orderType>3){
@@ -75,6 +83,7 @@ public class RunnerOrderController extends BaseController {
      * @return
      */
     @PostMapping("confirmOrder")
+    @PreAuthorize("hasAuthority('接单')")
     public RestResponse confirmOrder(Integer orderId,HttpServletRequest request){
         if(orderId==null){
             //todo 后期可能得要统一异常处理
@@ -93,6 +102,7 @@ public class RunnerOrderController extends BaseController {
      * @return
      */
     @GetMapping("/orderMessage")
+    @PreAuthorize("hasAuthority('接单')")
     public RestResponse orderMessage(Integer orderId,HttpServletRequest request){
 
         if(orderId==null){
@@ -110,9 +120,32 @@ public class RunnerOrderController extends BaseController {
      * @return
      */
     @PostMapping("revocation")
+    @PreAuthorize("hasAuthority('接单')")
     public RestResponse revocation(HttpServletRequest request){
-//todo 这里牵连出一大部分问题，我打算中间表撤销骑手那块直接删了算了，还有关于用户表状态需要更改的问题后面还需要更新sql语句来搞登录的东西
-return null;
+
+
+       String token= request.getHeader("token");
+       String userId= JwtUtil.getClaim(token).get("userId").toString();
+       userService.revocation(userId);
+return new RestResponse(200,"撤销成功",null);
+
+    }
+
+    /**
+     * 获取自己接过的订单数量
+     * @param request
+     * @return
+     */
+    @GetMapping("/getAccessCount")
+    @PreAuthorize("hasAuthority('接单')")
+    public RestResponse getAccessCount(HttpServletRequest request){
+        String token= request.getHeader("token");
+        String userId= JwtUtil.getClaim(token).get("userId").toString();
+       int count= orderService.getOrderCountByUserId(userId);
+        Map<String,Integer> map=new HashMap<>();
+        map.put("count",count);
+        RestResponse response=new RestResponse(200,"返回成功",map);
+    return response;
     }
 
 }

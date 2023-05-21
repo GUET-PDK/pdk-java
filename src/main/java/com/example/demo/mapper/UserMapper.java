@@ -13,4 +13,6 @@ public interface UserMapper extends BaseMapper<User> {
     int insertMiddleUserRole(String userId,int roleId);
 
     int selectRoleIdByRoleName(String roleName);
+    int selectMiddleIdByUserId(String userId);
+    int deleteMiddleRoleById(int Id);
 }

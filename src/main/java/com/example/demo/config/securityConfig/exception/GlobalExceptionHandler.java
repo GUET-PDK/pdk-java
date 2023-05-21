@@ -39,9 +39,12 @@ public class GlobalExceptionHandler {
             AppException appException = (AppException)e;
         log.error("全局异常",e);
             return RestResponse.error(appException.getCode(),appException.getMsg());
+        }else {
+            e.printStackTrace();
         }
 
         //如果拦截的异常不是我们自定义的异常(例如：数据库主键冲突)
+
         return RestResponse.error(500,"服务器端异常");
     }
 

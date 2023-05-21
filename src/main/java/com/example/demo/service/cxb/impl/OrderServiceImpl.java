@@ -101,5 +101,14 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    @Override
+    public int getOrderCountByUserId(String userId) {
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("take_user_id",userId);
+        queryWrapper.in("order_status",1,2);
+        int count=orderMapper.selectCount(queryWrapper).intValue();
+        return count;
+    }
+
 
 }

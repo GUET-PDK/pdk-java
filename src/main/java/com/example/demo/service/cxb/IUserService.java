@@ -10,4 +10,15 @@ public interface IUserService {
      * @return
      */
     boolean addNewUser(User user);
+
+    boolean revocation(String userId);
+
+
+    /**
+     * 发送验证码
+     * @param phone
+     * @return
+     */
+    boolean sentCode(String phone) throws Exception;
+
 }

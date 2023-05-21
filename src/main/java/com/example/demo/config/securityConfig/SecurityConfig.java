@@ -2,11 +2,14 @@ package com.example.demo.config.securityConfig;
 
 
 import com.example.demo.config.securityConfig.filter.JwtAuthenticationTokenFilter;
+import com.example.demo.config.securityConfig.filter.PhoneAuthenticationFilter;
 import com.example.demo.config.securityConfig.filter.WeChatAuthenticationFilter;
 import com.example.demo.config.securityConfig.handler.WxAccessDeniedHandlerImpl;
 import com.example.demo.config.securityConfig.handler.WxAuthenticationFailureHandler;
 import com.example.demo.config.securityConfig.handler.WxAuthenticationnSuccessHandler;
+import com.example.demo.config.securityConfig.provider.PhoneAuthenticationProvider;
 import com.example.demo.config.securityConfig.provider.WeChatAuthenticationProvider;
+import com.example.demo.config.securityConfig.token.PhoneAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        //用户名和密码登陆
 //        auth.userDetailsService(customUserService()).passwordEncoder(new BCryptPasswordEncoder());
         //微信openid登陆
-        auth.authenticationProvider(weChatAuthenticationProvider());
+        auth.authenticationProvider(weChatAuthenticationProvider())
+                .authenticationProvider(phoneAuthenticationProvider());
     }
 
 
@@ -54,12 +58,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new WeChatAuthenticationProvider();
     }
 
+    @Bean
+    public PhoneAuthenticationProvider phoneAuthenticationProvider(){
+        return new PhoneAuthenticationProvider();
+    }
+
     /**
      * 添加微信openid登陆验证的过滤器
      */
     @Bean
     public WeChatAuthenticationFilter weChatAuthenticationFilter() throws Exception {
         WeChatAuthenticationFilter filter = new WeChatAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(wxAuthenticationnSuccessHandler);
+        filter.setAuthenticationFailureHandler(wxAuthenticationFailureHandler);
+        return filter;
+    }
+
+
+    /**
+     * 添加电话号码登陆验证的过滤器
+     */
+    @Bean
+    public PhoneAuthenticationFilter phoneAuthenticationFilter() throws Exception {
+        PhoneAuthenticationFilter filter = new PhoneAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(wxAuthenticationnSuccessHandler);
         filter.setAuthenticationFailureHandler(wxAuthenticationFailureHandler);
@@ -77,13 +99,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-//                .antMatchers("/user/login").anonymous()
+
+                .antMatchers("/wechat/login","/admin/getCode","/admin/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
-                .addFilterAt(weChatAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(weChatAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(phoneAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling().accessDeniedHandler(wxAccessDeniedHandler);
-       // http.addFilterBefore(jwtAuthenticat'ionTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

@@ -71,75 +71,75 @@ String token=request.getHeader("token");
 
 
 
-
-    @RequestMapping("/publishOrder")
-    public RestResponse publishOrder(
-                                     String orderType,
-                                     String orderDescribe,
-                                     String publishTime,
-                                     String finishTime,
-                                     String orderAddress,
-                                     String money,
-                                     String myAddress,
-                                     HttpServletRequest request)
-    {
-
-
-//        使用jwt的工具类，，拿到token里面的用户id
-        String token=request.getHeader("token");
-        JwtUtil jwt = new JwtUtil();
-        String userId = jwt.getClaim(token).get("userId").toString();
-
-        int orderType2 = Integer.parseInt(orderType);
-//        订单已完成状态为2，未完成状态为1，未接收为0
-
-        int orderStatus = 0;
-
-        long time = System.currentTimeMillis();
-        Date createTime = new Date(time);
-
-//        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
-////        System.out.println(dateFormat.format(date));
-
-        Date startTime = createTime;
-
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
-        sdf.setLenient(false);
-
-        Date fTime;
-
-        try {
-            Date endTime = sdf.parse(finishTime);
-            fTime = endTime;
-
-        }catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        Order entity  = new Order(
-                userId,
-                orderType2,
-                orderStatus,
-                createTime,
-                startTime,
-                fTime,
-                myAddress,
-                orderAddress,
-                orderDescribe
-                );
-
-        try{
-            orderService.insert(entity);
-            return new RestResponse(200,"发布成功",null);
-        }catch(RuntimeException e){
-            e.printStackTrace();
-        }
-
-
-        return new RestResponse(200,"发布订单失败",null);
-    };
+//
+//    @RequestMapping("/publishOrder")
+//    public RestResponse publishOrder(
+//                                     String orderType,
+//                                     String orderDescribe,
+//                                     String publishTime,
+//                                     String finishTime,
+//                                     String orderAddress,
+//                                     String money,
+//                                     String myAddress,
+//                                     HttpServletRequest request)
+//    {
+//
+//
+////        使用jwt的工具类，，拿到token里面的用户id
+//        String token=request.getHeader("token");
+//        JwtUtil jwt = new JwtUtil();
+//        String userId = jwt.getClaim(token).get("userId").toString();
+//
+//        int orderType2 = Integer.parseInt(orderType);
+////        订单已完成状态为2，未完成状态为1，未接收为0
+//
+//        int orderStatus = 0;
+//
+//        long time = System.currentTimeMillis();
+//        Date createTime = new Date(time);
+//
+////        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
+//////        System.out.println(dateFormat.format(date));
+//
+//        Date startTime = createTime;
+//
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+//        sdf.setLenient(false);
+//
+//        Date fTime;
+//
+//        try {
+//            Date endTime = sdf.parse(finishTime);
+//            fTime = endTime;
+//
+//        }catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//
+//        Order entity  = new Order(
+//                userId,
+//                orderType2,
+//                orderStatus,
+//                createTime,
+//                startTime,
+//                fTime,
+//                myAddress,
+//                orderAddress,
+//                orderDescribe
+//                );
+//
+//        try{
+//            orderService.insert(entity);
+//            return new RestResponse(200,"发布成功",null);
+//        }catch(RuntimeException e){
+//            e.printStackTrace();
+//        }
+//
+//
+//        return new RestResponse(200,"发布订单失败",null);
+//    };
 
 
 

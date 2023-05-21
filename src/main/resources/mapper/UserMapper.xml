@@ -25,5 +25,11 @@ where a.user_id=#{userId}
         select role_id from sys_role where role_name=#{roleName}
     </select>
 
+    <select id="selectMiddleIdByUserId" resultType="java.lang.Integer">
+        select id from middle_user_role where user_id=#{userId} and role_id=(select role_id from sys_role where role_name="骑手")
+    </select>
 
+    <delete id="deleteMiddleRoleById">
+        delete from middle_user_role where id=#{Id}
+    </delete>
 </mapper>
