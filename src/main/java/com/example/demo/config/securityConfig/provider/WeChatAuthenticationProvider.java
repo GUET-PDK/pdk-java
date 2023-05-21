@@ -76,7 +76,7 @@ public class WeChatAuthenticationProvider implements AuthenticationProvider {
         }
 
         WeChatAuthenticationToken authenticationResult = new WeChatAuthenticationToken(resultUserId, authorities);
-
+        userMapper.insertBackLoginTime(resultUserId);
         return authenticationResult;
 //        //获取过滤器封装的token信息
 //        WeChatAuthenticationToken authenticationToken = (WeChatAuthenticationToken) authentication;

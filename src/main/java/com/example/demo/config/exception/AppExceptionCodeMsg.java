@@ -1,4 +1,4 @@
-package com.example.demo.config.securityConfig.exception;
+package com.example.demo.config.exception;
 
 import lombok.AllArgsConstructor;
 

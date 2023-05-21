@@ -15,4 +15,5 @@ public interface UserMapper extends BaseMapper<User> {
     int selectRoleIdByRoleName(String roleName);
     int selectMiddleIdByUserId(String userId);
     int deleteMiddleRoleById(int Id);
+    int insertBackLoginTime(String userId);
 }

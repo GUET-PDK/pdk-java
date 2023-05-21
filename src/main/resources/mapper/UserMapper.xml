@@ -32,4 +32,8 @@ where a.user_id=#{userId}
     <delete id="deleteMiddleRoleById">
         delete from middle_user_role where id=#{Id}
     </delete>
+
+    <insert id="insertBackLoginTime">
+        insert into back_user_login(user_id) values (#{userId})
+    </insert>
 </mapper>

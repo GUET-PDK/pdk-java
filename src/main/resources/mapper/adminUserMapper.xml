@@ -38,7 +38,7 @@
             user_id = #{userId}
     </update>
 
-    <select id="selectUserById"  resultType="com/example/demo/entity/User">
+    <select id="selectUserById"  resultType="com.example.demo.entity.User">
         select
             *
         from
