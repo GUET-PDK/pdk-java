@@ -13,7 +13,7 @@
         <result property="applyTime" column="apply_time"/>
     </resultMap>
 
-    <select id="countRunner" resultType="Integer">
+    <select id="countRunner" >
         select
             count(*)
         from
@@ -22,7 +22,7 @@
             role_id = 3;
     </select>
 
-    <select id="countDayToDay" resultType="Integer" >
+    <select id="countDayToDay" >
         select
             count(distinct a.user_id)
         from
@@ -37,7 +37,7 @@
             a.login_time between #{start} and #{end}
     </select>
 
-    <select id="countApplicationByStatus" resultType="Integer>">
+    <select id="countApplicationByStatus" resultType="java.lang.Integer">
         select
             count()
         from
@@ -64,7 +64,7 @@
             id = #{id}
     </update>
 
-    <select id="selectUserIdById" resultType="String">
+    <select id="selectUserIdById" >
         select
             userId
         from

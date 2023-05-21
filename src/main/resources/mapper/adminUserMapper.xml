@@ -3,11 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.AdminUserMapper">
-    <select id="countUser" resultType="Integer">
+    <select id="countUser">
         select count(*) from sys_user;
     </select>
 
-    <select id="countDayToDay" resultType="Integer" >
+    <select id="countDayToDay"  >
         select
             count(distinct a.user_id)
         from
