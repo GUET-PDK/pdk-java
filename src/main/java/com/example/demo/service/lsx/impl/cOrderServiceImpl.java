@@ -1,7 +1,13 @@
 package com.example.demo.service.lsx.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.example.demo.controller.vo.SentPublishOrder;
+import com.example.demo.controller.vo.TakeAwayOrder;
+import com.example.demo.controller.vo.UniversalOrder;
 import com.example.demo.entity.Order;
+import com.example.demo.mapper.SentPublishMapper;
+import com.example.demo.mapper.TakeAwayMapper;
+import com.example.demo.mapper.UniversalServiceMapper;
 import com.example.demo.mapper.cOrderMapper;
 import com.example.demo.service.lsx.cAppraiseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +28,15 @@ public class cOrderServiceImpl implements cAppraiseService {
 
     @Autowired
     cOrderMapper orderMapper;
+
+    @Autowired
+    SentPublishMapper sentPublishMapper;
+
+    @Autowired
+    TakeAwayMapper takeAwayMapper;
+
+    @Autowired
+    UniversalServiceMapper universalServiceMapper;
 
 
     @Override
@@ -61,6 +76,25 @@ public class cOrderServiceImpl implements cAppraiseService {
         return orderMapper.selectOrderListForCount(userId);
     }
 
+    @Override
+    public int insertSubstitution(String shippingAddress, String deliveryTime1, String deliveryTime2, String remark, String pickUpCode, int price, String courierSize, int orderId) {
+        return orderMapper.insertSubstitution(shippingAddress,deliveryTime1,deliveryTime2,remark,pickUpCode,price,courierSize,orderId);
+    }
+
+    @Override
+    public int insertUniversalOrder(UniversalOrder universalOrder) {
+        return universalServiceMapper.insert(universalOrder);
+    }
+
+    @Override
+    public int insertSentOrder(SentPublishOrder sentPublishOrder) {
+        return sentPublishMapper.insert(sentPublishOrder);
+    }
+
+    @Override
+    public int insertTakeAwayOrder(TakeAwayOrder takeAwayOrder) {
+        return takeAwayMapper.insert(takeAwayOrder);
+    }
 
 
     //插入不同的四个类型的订单

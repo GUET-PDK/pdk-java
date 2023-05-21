@@ -20,4 +20,26 @@ values (#{comment},#{grade},#{orderId},#{userId})
         select * from sys_order where user_id = #{userId} and order_id = #{orderId}
     </select>
 
+    <insert id="insertSubstitution">
+        insert into sys_order_substitution(shipping_address,
+                                           order_id,
+                                           delivery_time_1,
+                                           delivery_time_2,
+                                           pickup_code,
+                                           remark,
+                                           courier_size,
+                                           price)
+values (#{shippingAddress},
+        #{orderId},
+        #{deliveryTime1},
+        #{deliveryTime2},
+        #{pickUpCode},
+        #{remark},
+        #{courierSize},
+        #{price}
+    </insert>
+
+
+
+
 </mapper>

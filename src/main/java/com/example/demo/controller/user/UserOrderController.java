@@ -1,10 +1,15 @@
 package com.example.demo.controller.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.demo.controller.vo.SentPublishOrder;
+import com.example.demo.controller.vo.TakeAwayOrder;
+import com.example.demo.controller.vo.UniversalOrder;
+import com.example.demo.controller.vo.substitutionOrder;
 import com.example.demo.entity.Order;
 import com.example.demo.service.lsx.impl.cOrderServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
+import com.example.demo.utils.upLoads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,8 +56,11 @@ public class UserOrderController extends BaseController{
     @Value("${orderStatus.universal}")
     private int universalType;
 
+    @Value("${uploads.path}")
+    private String upImagePath;
 
-
+    @Value("${get.path}")
+    private String getImagePath;
 
 
     /**
@@ -217,15 +225,93 @@ public class UserOrderController extends BaseController{
 
 
 
+    @RequestMapping("/sentPublishOrder")
+    public RestResponse sentPublishOrder(
+            String shippingAddress,
+            String recipientAddress,
+            String type,
+            String remark,
+            String courizer_size,
+            Integer price,
+            HttpServletRequest request
+    ){
+
+        //        使用jwt的工具类，，拿到token里面的用户id
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
 
 
+        //存入两个表,,一般订单表
+
+        int orderType = orderSentType;
+        int orderStatus = publishStatus;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
+        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date updateTime = createTime;
+
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setOrderStatus(orderStatus);
+        order.setOrderType(orderType);
+        order.setCreateTime(createTime);
+        order.setUpdateTime(updateTime);
+
+
+        try {
+            int result = orderService.insert(order);
+        } catch (Exception e) {
+            return new RestResponse(200,"发布失败",e);
+
+        }
+        //插入数据，id自动递增，赋值
+        int orderId = order.getOrderId();
+
+
+        SentPublishOrder sentPublishOrder = new SentPublishOrder();
+        sentPublishOrder.setOrderId(orderId);
+        sentPublishOrder.setCourierSize(courizer_size);
+        sentPublishOrder.setPrice(price);
+        sentPublishOrder.setRemark(remark);
+        sentPublishOrder.setRecipientAddress(recipientAddress);
+        sentPublishOrder.setType(type);
+
+        try {
+            orderService.insertSentOrder(sentPublishOrder);
+            return new RestResponse(200,"发布成功",null);
+        } catch (Exception e) {
+            return new RestResponse(200,"发布失败",e);
+        }
+
+
+    }
+
+
+
+    /**
+     * @Author ctfliar
+     * @Description //TODO
+     * @Date 20:36 2023/5/21
+     * @Param
+     * @param shippingAddress
+     * @param deliveryTime1
+     * @param deliveryTime2
+     * @param remark
+     * @param pickupCode
+     * @param price
+     * @param courierSize
+     * @param request
+     * @return
+     * @return com.example.demo.utils.RestResponse
+     **/
     @RequestMapping("/substitutionPublishOrder")
     public RestResponse substitutionPublishOrder(
             String shippingAddress,
             String deliveryTime1,
             String deliveryTime2,
             String remark,
-            List<MultipartFile> pickupCode,   //，文件数组取件码截图
+            MultipartFile pickupCode,   //，文件数组取件码截图  //默认情况是一张
             int price,
             String courierSize,
             HttpServletRequest request)
@@ -256,20 +342,145 @@ public class UserOrderController extends BaseController{
         int result = orderService.insert(order);
         //插入数据，id自动递增，赋值
         int orderId = order.getOrderId();
-        if(result>0){
-            orderId = order.getOrderId();
-        }
+
+
+
+
+
+        String imagePath = new upLoads().upLoad(pickupCode,upImagePath,getImagePath);
 
 
         //获取返回之后的orderId之后插入第二张表
+        //vo虚拟传输工具类
 
 
+        try {
+            orderService.insertSubstitution(
+                    shippingAddress,
+                    createTime.toString(),
+                    updateTime.toString(),
+                    remark,
+                    courierSize,
+                    price,
+                    imagePath,
+                    orderId);
+            return new RestResponse(200,"发布成功",null);
 
-        return new RestResponse(200,"发布订单失败",null);
+        } catch (Exception e) {
+            return new RestResponse(200,"发布失败",e);
+
+        }
+
     };
 
 
 
+
+    @RequestMapping("/takeawayPublishOrder")
+    public RestResponse takeawayPublishOrder(
+            String shippingAddress,
+            String pickUpPositon,
+            String remark,
+            Integer price,
+            HttpServletRequest request
+    ){
+
+        //        使用jwt的工具类，，拿到token里面的用户id
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+
+        //存入两个表,,一般订单表
+
+        int orderType = takeAwayType;
+        int orderStatus = publishStatus;
+
+
+        SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
+        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date updateTime = createTime;
+
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setOrderStatus(orderStatus);
+        order.setOrderType(orderType);
+        order.setCreateTime(createTime);
+        order.setUpdateTime(updateTime);
+
+
+        int result = orderService.insert(order);
+        //插入数据，id自动递增，赋值
+        int orderId = order.getOrderId();
+
+
+        TakeAwayOrder takeAwayOrder = new TakeAwayOrder();
+        takeAwayOrder.setOrderId(orderId);
+        takeAwayOrder.setPrice(price);
+        takeAwayOrder.setRemark(remark);
+        takeAwayOrder.setShippingAddress(shippingAddress);
+        takeAwayOrder.setPickUpPosition(pickUpPositon);
+        try {
+            orderService.insertTakeAwayOrder(takeAwayOrder);
+            return new RestResponse(200,"发布成功",null);
+        } catch (Exception e) {
+            return new RestResponse(200,"发布失败",e);
+        }
+
+    }
+
+
+
+    @RequestMapping("/universalServicePublishOrder")
+    public RestResponse universalServicePublishOrder(
+            String serviceDescription,
+            Integer price,
+            String remark,
+            HttpServletRequest request
+    ){
+
+        //        使用jwt的工具类，，拿到token里面的用户id
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+
+        //存入两个表,,一般订单表
+
+        int orderType = universalType;
+        int orderStatus = publishStatus;
+
+
+        SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
+        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date updateTime = createTime;
+
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setOrderStatus(orderStatus);
+        order.setOrderType(orderType);
+        order.setCreateTime(createTime);
+        order.setUpdateTime(updateTime);
+
+
+        int result = orderService.insert(order);
+        //插入数据，id自动递增，赋值
+        int orderId = order.getOrderId();
+
+        UniversalOrder universalOrder = new UniversalOrder();
+        universalOrder.setOrder_id(orderId);
+        universalOrder.setPrice(price);
+        universalOrder.setRemark(remark);
+        universalOrder.setServiceDescription(serviceDescription);
+
+        try {
+            orderService.insertUniversalOrder(universalOrder);
+            return new RestResponse(200,"发布成功",null);
+        } catch (Exception e) {
+            return new RestResponse(200,"发布失败",e);
+        }
+
+    }
 
 
 

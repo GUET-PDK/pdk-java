@@ -59,15 +59,25 @@ public interface cOrderMapper extends BaseMapper<Order> {
     @Override
     int insert(Order entity);
 
+
+
+    //插入四个类型不一样的具体表，
+
+
+
+
     int insertSubstitution(String shippingAddress,
                            String deliveryTime1,
                            String deliveryTime2,
                            String remark,
-                           List<MultipartFile> pickupCode,   //，文件数组取件码截图
+                           String pickUpCode,   //，文件数组取件码截图,,服务器后面处理上传的图片然后返回来的图片的路径
                            int price,
                            String courierSize,
-                           int userId,
                            int orderId);
+
+
+
+
 
 
 
