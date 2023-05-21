@@ -22,4 +22,19 @@ public class UserServiceImpl implements IUserService {
         return true;
        else return false;
     }
+
+    @Override
+    public boolean revocation(String userId) {
+
+       Integer id= userMapper.selectMiddleIdByUserId(userId);
+       if(id==null){
+           //todo 异常
+       }
+      int i =userMapper.deleteMiddleRoleById(id);
+       if(i==0){
+           //todo 异常
+       }
+        return true;
+    }
+
 }

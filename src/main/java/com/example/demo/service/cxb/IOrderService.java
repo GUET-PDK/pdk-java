@@ -23,4 +23,11 @@ public interface IOrderService {
 
     Object getOrderDetail(int orderId,String userId);
 
+    /**
+     * 骑手获取自己接单的数量
+     * @param userId
+     * @return
+     */
+    int getOrderCountByUserId(String userId);
+
 }

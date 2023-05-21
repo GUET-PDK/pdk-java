@@ -36,13 +36,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
         String token=request.getHeader("token");
+        System.out.println("进入到jwt区域");
         if(!StringUtils.hasText(token)){
+            System.out.println("可能是空的");
             filterChain.doFilter(request,response);
          return;
         }
         System.out.println("这是旧的token   "+token);
         if(!JwtUtil.verify(token)){
 
+            System.out.println("token验证失败");
             response.setContentType("application/json; charset=utf-8");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(403);
@@ -61,7 +64,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             Claims claims=JwtUtil.getClaim(token);
             String userId=claims.get("userId").toString();
             Object object= redisCache.getCacheObject("login_"+token);
+            System.out.println("到这一部了");
             if(object==null){
+                System.out.println("这是空的撒酒疯噶三个房间");
                 //todo 这是登录过期的，要重新登录
                 System.out.println("已经过期了");
                 response.setContentType("application/json; charset=utf-8");
@@ -80,7 +85,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
 
 
-
+            System.out.println("到这一步就是外的事情了");
               redisCache.deleteObject("login_"+token);
               Map map=new HashMap();
               map.put("userId",userId);

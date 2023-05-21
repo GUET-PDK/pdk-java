@@ -107,12 +107,12 @@
             <scope>runtime</scope>
         </dependency>
 
+<!--        阿里云短信服务-->
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dysmsapi20170525</artifactId>
+            <version>2.0.23</version>
         </dependency>
-
 
     </dependencies>
 

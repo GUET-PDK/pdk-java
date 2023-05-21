@@ -10,4 +10,6 @@ public interface IUserService {
      * @return
      */
     boolean addNewUser(User user);
+
+    boolean revocation(String userId);
 }
