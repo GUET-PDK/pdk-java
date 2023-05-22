@@ -83,8 +83,6 @@ public class UserOrderController extends BaseController{
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
         Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
-
-
         //status分别表示未结单，配送中，已完成三种状态
         //示例值:
         //0或1或2
