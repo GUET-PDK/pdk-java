@@ -137,7 +137,7 @@ return new RestResponse(200,"撤销成功",null);
      * @return
      */
     @GetMapping("/getAccessCount")
-    @PreAuthorize("hasAuthority('接单')")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse getAccessCount(HttpServletRequest request){
         String token= request.getHeader("token");
         String userId= JwtUtil.getClaim(token).get("userId").toString();

@@ -5,6 +5,7 @@ import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class AdminControllerAboveRunner {
     private AdminRunner adminRunner;
 
     @GetMapping("/countApplication")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse countApplication(){
         Map<String, Integer> map = adminRunner.countApplication();
         RestResponse success = RestResponse.success(map);
@@ -39,6 +41,7 @@ public class AdminControllerAboveRunner {
     }
 
     @GetMapping("/getRunnerApplyMessage")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse getRunnerApplyMessage(String userId){
         ApplyMessage runnerApplyMessage = adminRunner.getRunnerApplyMessage(userId);
         return RestResponse.success(runnerApplyMessage);
@@ -46,6 +49,7 @@ public class AdminControllerAboveRunner {
 
 
     @PostMapping("/allowRunner")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse allowRunner(Integer id){
         int nums = adminRunner.allowRunner(id);
         if (nums==2) {
@@ -56,6 +60,7 @@ public class AdminControllerAboveRunner {
     }
 
     @PostMapping("/disAllowRunner")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse disAgreeRunner(Integer id){
         int i = adminRunner.disAgreeRunner(id);
         if (i==1) {

@@ -5,6 +5,7 @@ import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +36,7 @@ public class AdminControllerAboveUser {
      * @return RestResponse<Map<String,Integer>>
      */
     @GetMapping("/countUser")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse<Map<String,Integer>> countUser(){
         HashMap<String, Integer> map = new HashMap<>();
 
@@ -52,6 +54,7 @@ public class AdminControllerAboveUser {
      * @return RestResponse<List < Map < String, Integer>>>
      */
     @GetMapping("getActiveCount")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse getActiveCount(){
 
         List<Map<String,Integer>> data = new ArrayList<>();
@@ -73,6 +76,7 @@ public class AdminControllerAboveUser {
      * 获取所有用户信息
      */
     @GetMapping("/getUserMessage")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse getAllUsers(){
         List<User> allUsers = adminUser.getAllUsers();
         RestResponse success = RestResponse.success(allUsers);
@@ -84,6 +88,7 @@ public class AdminControllerAboveUser {
      * @param userId 用户Id
      */
     @PostMapping("/banUser")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse banUser(String userId){
         RestResponse response = RestResponse.success(null);
         try {
@@ -100,6 +105,7 @@ public class AdminControllerAboveUser {
      * @param userId 用户名
      */
     @PostMapping("/pinUser")
+    @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse pinUser(String userId){
         RestResponse response = RestResponse.success(null);
         try {
