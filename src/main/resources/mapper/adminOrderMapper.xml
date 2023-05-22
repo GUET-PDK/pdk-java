@@ -84,13 +84,13 @@
             order_id = #{id}
     </delete>
 
-    <select id="countPostOrder" resultType="Integer">
+    <select id="countPostOrder" resultType="java.lang.Integer">
         select
             count(distinct order_id)
         from
             sys_order
     </select>
-    <select id="countPickUpOrder" resultType="Integer">
+    <select id="countPickUpOrder" resultType="java.lang.Integer">
         select
             count(distinct order_id)
         from
@@ -98,7 +98,7 @@
         where
             order_status = 1
     </select>
-    <select id="countFinishOrder" resultType="Integer">
+    <select id="countFinishOrder" resultType="java.lang.Integer">
         select
             count(distinct order_id)
         from

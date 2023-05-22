@@ -4,6 +4,7 @@ import com.example.demo.dto.OrderMessage;
 import com.example.demo.service.jyc.inters.AdminOrder;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class AdminControllerAboveOrder {
     private AdminOrder adminOrder;
 
     @GetMapping("/gerAllOrders")
+    @PreAuthorize("hasAuthority('管理订单')")
     public RestResponse getAllOrders(){
         try {
             List<OrderMessage> allOrders = adminOrder.getAllOrders();
@@ -38,6 +40,7 @@ public class AdminControllerAboveOrder {
     }
 
     @PostMapping("/deleteOrder")
+    @PreAuthorize("hasAuthority('管理订单')")
     public RestResponse deleteOrder(Integer orderId){
         try {
             adminOrder.deleteOrder(orderId);
@@ -48,6 +51,7 @@ public class AdminControllerAboveOrder {
     }
 
     @GetMapping("/allOrder")
+    @PreAuthorize("hasAuthority('管理订单')")
     public RestResponse getAllOrderNums(){
         Map<String, Integer> map = adminOrder.countOrders();
         return RestResponse.success(map);

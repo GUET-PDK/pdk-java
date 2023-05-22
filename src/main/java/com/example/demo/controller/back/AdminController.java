@@ -1,7 +1,11 @@
 package com.example.demo.controller.back;
 
 
+import com.example.demo.config.exception.AppException;
+import com.example.demo.config.exception.AppExceptionCodeMsg;
 import com.example.demo.service.cxb.IUserService;
+import com.example.demo.utils.JwtUtil;
+import com.example.demo.utils.RedisCache;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
 
 /**
@@ -28,6 +33,8 @@ public class AdminController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    RedisCache redisCache;
     /**
      * 登录获取验证码
      */
@@ -37,7 +44,8 @@ public class AdminController {
 
         if ((phone != null) && (!phone.isEmpty())) {
             if(!Pattern.matches("^1[3-9]\\d{9}$", phone)){
-                //todo 手机号异常，抛出参数异常
+
+                throw new AppException(AppExceptionCodeMsg.PARAMS_ERROR);
             }
             System.out.println("进入到这里了");
         }
@@ -48,22 +56,16 @@ public class AdminController {
             return new RestResponse(408,"该手机号没有绑定用户",null);
         }
     }
-    /**
-     * 管理员登陆
-     * @param name
-     * @param password
-     */
-    @RequestMapping("/login")
-    public void adminLogin(String name,String password){
 
-    }
 
     /**
      * 管理员退出
      */
     @RequestMapping("/exit")
-    public void exit(){
-
+    public RestResponse exit(HttpServletRequest request){
+        String token = request.getHeader("token");
+        redisCache.deleteObject("login_"+token);
+        return new RestResponse(200,"退出成功",null);
     }
 
 
