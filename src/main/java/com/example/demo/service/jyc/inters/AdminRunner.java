@@ -18,4 +18,6 @@ public interface AdminRunner {
     int allowRunner(Integer id);
 
     int disAgreeRunner(Integer id);
+
+    List<ApplyMessage> getApplyList();
 }

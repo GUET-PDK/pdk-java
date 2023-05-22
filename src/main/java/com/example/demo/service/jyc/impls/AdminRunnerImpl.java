@@ -101,4 +101,11 @@ public class AdminRunnerImpl implements AdminRunner {
         }
         return 0;
     }
+
+    @Override
+    public List<ApplyMessage> getApplyList() {
+        List<ApplyMessage> list = new ArrayList<>();
+        adminRunnerMapper.selectAllApply();
+        return null;
+    }
 }

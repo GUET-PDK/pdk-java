@@ -55,6 +55,7 @@
             id = #{id}
     </select>
 
+
     <update id="updateApplyStatus">
         update
             sys_apply_runner
@@ -81,5 +82,12 @@
         where
             user_id = #{userId}
     </update>
+
+    <select id="selectAllApply" resultType="com.example.demo.dto.ApplyMessage">
+        select
+            *
+        from
+            sys_apply_runner
+    </select>
 
 </mapper>

@@ -72,4 +72,9 @@ public class AdminControllerAboveRunner {
         }
     }
 
+    @GetMapping("getApplyList")
+    public RestResponse getApplyList(){
+        return null;
+    }
+
 }

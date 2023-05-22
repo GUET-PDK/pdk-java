@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Date;
+import java.util.List;
+
 @Mapper
 public interface AdminRunnerMapper {
     Integer countRunner();
@@ -20,4 +22,6 @@ public interface AdminRunnerMapper {
     String selectUserIdById(@Param("id")Integer id);
 
     int updateRoleIdByUserId(@Param("userId")String userId);
+
+    List<ApplyMessage> selectAllApply();
 }
