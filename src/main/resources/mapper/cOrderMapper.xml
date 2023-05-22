@@ -36,7 +36,7 @@ values (#{shippingAddress},
         #{pickUpCode},
         #{remark},
         #{courierSize},
-        #{price}
+        #{price})
     </insert>
 
 

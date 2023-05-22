@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,15 +21,17 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("sys_apply_runner")
 public class Apply implements Serializable {
 
+    @TableId("id")
     int id;
-    int userId;
+    String userId;
     int cardNumber;
     int idNumber;
     String idImage;
     String cardImage;
-    public Apply(int userId, int cardNumber, int idNumber, String idImage, String cardImage) {
+    public Apply(String userId, int cardNumber, int idNumber, String idImage, String cardImage) {
         this.userId = userId;
         this.cardNumber = cardNumber;
         this.idNumber = idNumber;

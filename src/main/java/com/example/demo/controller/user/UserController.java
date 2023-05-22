@@ -96,20 +96,20 @@ public class UserController extends BaseController{
      * @Description //用户更改地址
      * @Date 16:36 2023/4/25
      * @Param
-     * @param address
+     * @param
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/updateAddress")
+    @RequestMapping("/addAddress")
     @PreAuthorize("hasAuthority('下订单')")
-    public RestResponse updateAddress(@RequestParam("address") String address,String addressPhone,String addressName,HttpServletRequest request){
+    public RestResponse updateAddress(String address_description,String address_phone,String address_name,HttpServletRequest request){
 
         String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
         String userId = jwt.getClaim(token).get("userId").toString();;
 
         try{
-            Address data= userService.updateAddress(userId,address,addressPhone,addressName);
+            userService.updateAddress(userId,address_description,address_phone,address_name);
             return new RestResponse(200,"更新地址成功",null);
         }catch (RuntimeException e){
             e.printStackTrace();
@@ -133,7 +133,7 @@ public class UserController extends BaseController{
 
         String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
-        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());;
+        String userId = jwt.getClaim(token).get("userId").toString();;
 
         Apply apply = new Apply(userId,Integer.parseInt(idNumber),Integer.parseInt(cardNumber),idImagePath,cardImagePath);
 

@@ -25,7 +25,7 @@ public interface cUserMapper extends BaseMapper<User> {
 //    userId,address,addressPhone,addressName
     Address updateAddress(String userId,String address,String addressPhone,String addressName);
 
-    Address deleteAddress(String addressId,String userId);
+    void deleteAddress(String addressId,String userId);
 
 
     @Select("select open_id from sys_user where user_id = #{userId}")
@@ -35,7 +35,7 @@ public interface cUserMapper extends BaseMapper<User> {
     @Select("select address_id," +
             "address_description," +
             "address_name,address_phone " +
-            "from sys_user_address where user_id = #{userId}}")
+            "from sys_user_address where user_id = #{userId}")
     List<Address> selectAddressListByUserId(int userId);
 
 }

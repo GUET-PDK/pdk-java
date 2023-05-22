@@ -21,18 +21,18 @@ public interface cAppraiseService {
 
 
 
-    Order selectOneById(Integer OrderId,Integer userId);
-    List<List<Integer>> selectOrderIdAndOrder(Integer userId,Integer orderStatus);
+    Order selectOneById(Integer OrderId,String userId);
+    List<List<Integer>> selectOrderIdAndOrder(String userId,Integer orderStatus);
     List<Order> selectList(String tableName,Integer orderId);
     int insert(Order entity);
     int selectOrderStatus(int userId);
-    int appraise(Integer orderId,String comment,int userId,Integer grade);
-    int updateOrderStatusByOrderId(Integer orderId,int userId,int status);
+    int appraise(Integer orderId,String comment,String userId,Integer grade);
+    int updateOrderStatusByOrderId(Integer orderId,String userId,int status);
 
-    List<Order> selectOrderListForCount(int userId);
+    List<Order> selectOrderListForCount(String userId);
 
 
-    int insertSubstitution(String shippingAddress,
+    void insertSubstitution(String shippingAddress,
                            String deliveryTime1,
                            String deliveryTime2,
                            String remark,

@@ -6,6 +6,7 @@ import com.example.demo.controller.vo.TakeAwayOrder;
 import com.example.demo.controller.vo.UniversalOrder;
 import com.example.demo.controller.vo.substitutionOrder;
 import com.example.demo.entity.Order;
+import com.example.demo.service.cxb.impl.OrderServiceImpl;
 import com.example.demo.service.lsx.impl.cOrderServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
@@ -35,6 +36,7 @@ import java.util.List;
  **/
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/user")
 public class UserOrderController extends BaseController{
 
 
@@ -65,6 +67,8 @@ public class UserOrderController extends BaseController{
     @Value("${get.path}")
     private String getImagePath;
 
+    @Autowired
+    OrderServiceImpl orderService2;
 
     /**
      * @Author ctfliar
@@ -79,14 +83,7 @@ public class UserOrderController extends BaseController{
     public RestResponse selectOrder(HttpServletRequest request,Integer status)
     {
 
-        String token=request.getHeader("token");
-//        使用jwt的工具类，，拿到token里面的用户id
-        JwtUtil jwt = new JwtUtil();
-        Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
-        //status分别表示未结单，配送中，已完成三种状态
-        //示例值:
-        //0或1或2
-
+        String userId = "ctfliar";
 
         try{
 
@@ -159,14 +156,14 @@ public class UserOrderController extends BaseController{
         String token=request.getHeader("token");
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
-        Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
+        String userId = jwt.getClaim(token).get("userId").toString();
 
         QueryWrapper<Order> qw = new QueryWrapper<Order>();
         qw.eq("user_id",userId);
         qw.eq("order_id",orderId);
 
         try {
-            Order order = orderService.selectOneById(orderId,userId);
+            Object order = orderService2.getOrderDetail(orderId,userId);
             return new RestResponse(200,"查询数据成功",order);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -200,7 +197,7 @@ public class UserOrderController extends BaseController{
 
         String token = request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
-        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
+        String userId = jwt.getClaim(token).get("userId").toString();
 
 
 
@@ -255,7 +252,7 @@ public class UserOrderController extends BaseController{
         int orderStatus = publishStatus;
 
         SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
-        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date createTime = new Date(System.currentTimeMillis());
         Date updateTime = createTime;
 
         Order order = new Order();
@@ -318,9 +315,9 @@ public class UserOrderController extends BaseController{
             String shippingAddress,
             String deliveryTime1,
             String deliveryTime2,
-            String remark,
             MultipartFile pickupCode,   //，文件数组取件码截图  //默认情况是一张
-            int price,
+            String remark,
+            Integer price,
             String courierSize,
             HttpServletRequest request)
     {
@@ -336,7 +333,7 @@ public class UserOrderController extends BaseController{
         int orderType = substitutionType;
         int orderStatus = publishStatus;
         SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
-        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date createTime = new Date(System.currentTimeMillis());
         Date updateTime = createTime;
 
         Order order = new Order();
@@ -363,15 +360,7 @@ public class UserOrderController extends BaseController{
 
 
         try {
-            orderService.insertSubstitution(
-                    shippingAddress,
-                    createTime.toString(),
-                    updateTime.toString(),
-                    remark,
-                    courierSize,
-                    price,
-                    imagePath,
-                    orderId);
+            orderService.insertSubstitution(shippingAddress,deliveryTime1,deliveryTime2,remark,imagePath,price,courierSize,orderId);
             return new RestResponse(200,"发布成功",null);
 
         } catch (Exception e) {
@@ -407,7 +396,7 @@ public class UserOrderController extends BaseController{
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
-        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date createTime = new Date(System.currentTimeMillis());
         Date updateTime = createTime;
 
         Order order = new Order();
@@ -462,7 +451,7 @@ public class UserOrderController extends BaseController{
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("y-y-y-y-MM-dd HH:mm:ss");
-        Date createTime = new Date(formatter.format(System.currentTimeMillis()));
+        Date createTime = new Date(System.currentTimeMillis());
         Date updateTime = createTime;
 
         Order order = new Order();

@@ -17,6 +17,7 @@ import java.util.Date;
 @TableName("sys_order")
 public class Order implements Serializable {
 
+
     @TableId(value = "order_id",type = IdType.AUTO)
     private int orderId;
     private String userId;

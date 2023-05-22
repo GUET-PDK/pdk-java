@@ -30,10 +30,10 @@ public interface cOrderMapper extends BaseMapper<Order> {
     List<Order> selectList(Wrapper<Order> queryWrapper);
 
 
-    @Select("select order_type,order_id from sys_order where user_id=#{userId} and order_status=#{orderStatus}};")
-    List<List<Integer>> selectOrderIdAndOrder(Integer userId,Integer orderStatus);
+    @Select("select order_type,order_id from sys_order where user_id=#{userId} and order_status=#{orderStatus};")
+    List<List<Integer>> selectOrderIdAndOrder(String userId,Integer orderStatus);
 
-    Order selectOneById(Integer orderId,Integer userId);
+    Order selectOneById(Integer orderId,String userId);
 
 
 
@@ -46,7 +46,7 @@ public interface cOrderMapper extends BaseMapper<Order> {
     int selectOrderStatus(int userId);
 
 //    用户评论，，增添一条评论
-    int appraise(Integer orderId,String comment,int userId,Integer grade);
+    int appraise(Integer orderId,String comment,String userId,Integer grade);
 
 
 
@@ -66,14 +66,14 @@ public interface cOrderMapper extends BaseMapper<Order> {
 
 
 
-    int insertSubstitution(String shippingAddress,
-                           String deliveryTime1,
-                           String deliveryTime2,
-                           String remark,
-                           String pickUpCode,   //，文件数组取件码截图,,服务器后面处理上传的图片然后返回来的图片的路径
-                           int price,
-                           String courierSize,
-                           int orderId);
+    void insertSubstitution(String shippingAddress,
+                            int orderId,
+                            String deliveryTime1,
+                            String deliveryTime2,
+                            String pickUpCode,   //，文件数组取件码截图,,服务器后面处理上传的图片然后返回来的图片的路径
+                            String remark,
+                            String courierSize,
+                            int price);
 
 
 
@@ -89,13 +89,13 @@ public interface cOrderMapper extends BaseMapper<Order> {
 
 //    将订单的状态修改   0   1   2  发布，接单，完成
     @Update("update sys_order set order_status = #{status} where user_id = #{userId} and order_id = #{orderId}")
-    int updateOrderStatusByOrderId(Integer orderId,int userId,int status);
+    int updateOrderStatusByOrderId(Integer orderId,String userId,int status);
 
 
 
     //根据用户id查出，，用户发布的订单列表，求总数
-    @Select("select * from sys_order where user_id = #{userId}}")
-    List<Order> selectOrderListForCount(int userId);
+    @Select("select * from sys_order where user_id = #{userId}")
+    List<Order> selectOrderListForCount(String userId);
 
 
 

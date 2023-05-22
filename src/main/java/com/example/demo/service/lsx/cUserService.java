@@ -25,7 +25,7 @@ public interface cUserService extends IService<User>{
     public int MyUpdateById(User entity);
 
 
-    Address deleteAddress(String addressId,String userId);
+    void deleteAddress(String addressId,String userId);
 
 
     String selecetOpenId(String userId);

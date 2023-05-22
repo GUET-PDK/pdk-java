@@ -36,8 +36,8 @@ public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements c
     }
 
     @Override
-    public Address deleteAddress(String addressId, String userId) {
-        return userMapper.deleteAddress(addressId,userId);
+    public void deleteAddress(String addressId, String userId) {
+        userMapper.deleteAddress(addressId,userId);
     }
 
     @Override

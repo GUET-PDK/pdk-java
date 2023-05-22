@@ -39,13 +39,16 @@ public class cOrderServiceImpl implements cAppraiseService {
     UniversalServiceMapper universalServiceMapper;
 
 
+
+
+
     @Override
-    public Order selectOneById(Integer orderId,Integer userId) {
-        return orderMapper.selectOneById(orderId,userId);
+    public Order selectOneById(Integer OrderId, String userId) {
+        return orderMapper.selectOneById(OrderId,userId);
     }
 
     @Override
-    public List<List<Integer>> selectOrderIdAndOrder(Integer userId, Integer orderStatus) {
+    public List<List<Integer>> selectOrderIdAndOrder(String userId, Integer orderStatus) {
         return orderMapper.selectOrderIdAndOrder(userId,orderStatus);
     }
 
@@ -62,23 +65,23 @@ public class cOrderServiceImpl implements cAppraiseService {
     }
 
     @Override
-    public int appraise(Integer orderId, String comment, int userId, Integer grade) {
+    public int appraise(Integer orderId, String comment, String userId, Integer grade) {
         return orderMapper.appraise(orderId,comment,userId,grade);
     }
 
     @Override
-    public int updateOrderStatusByOrderId(Integer orderId, int userId,int status) {
+    public int updateOrderStatusByOrderId(Integer orderId, String userId,int status) {
         return orderMapper.updateOrderStatusByOrderId(orderId,userId,status);
     }
 
     @Override
-    public List<Order> selectOrderListForCount(int userId) {
+    public List<Order> selectOrderListForCount(String userId) {
         return orderMapper.selectOrderListForCount(userId);
     }
 
     @Override
-    public int insertSubstitution(String shippingAddress, String deliveryTime1, String deliveryTime2, String remark, String pickUpCode, int price, String courierSize, int orderId) {
-        return orderMapper.insertSubstitution(shippingAddress,deliveryTime1,deliveryTime2,remark,pickUpCode,price,courierSize,orderId);
+    public void insertSubstitution(String shippingAddress, String deliveryTime1, String deliveryTime2, String remark, String pickUpCode, int price, String courierSize, int orderId) {
+        orderMapper.insertSubstitution(shippingAddress,orderId,deliveryTime1,deliveryTime2,pickUpCode,remark,courierSize,price);
     }
 
     @Override
