@@ -72,7 +72,7 @@ public class UserOrderController extends BaseController{
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/user/selectOrder")
+    @RequestMapping("/selectOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse selectOrder(HttpServletRequest request,Integer orderStatus)
     {
