@@ -22,9 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName UserOrderController
@@ -74,15 +72,15 @@ public class UserOrderController extends BaseController{
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/selectOrder")
+    @RequestMapping("/user/selectOrder")
     @PreAuthorize("hasAuthority('下订单')")
-    public RestResponse selectOrder(HttpServletRequest request,Integer status)
+    public RestResponse selectOrder(HttpServletRequest request,Integer orderStatus)
     {
 
         String token=request.getHeader("token");
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
-        Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
+        String userId = (jwt.getClaim(token).get("userId").toString());
         //status分别表示未结单，配送中，已完成三种状态
         //示例值:
         //0或1或2
@@ -91,27 +89,27 @@ public class UserOrderController extends BaseController{
         try{
 
             //通过status，和userId找到orderType(对应不同的表)和orderId,返回的是一个列表
-            List<List<Integer>> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId,status);
+            List<Map> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId,orderStatus);
 
             List<Object> list = new ArrayList<>();
             for(int i=0;i<orderTypeAndOrderId.size();i++)
             {
                 //oderType,0,1,2,3对应下面四种类型的订单表,
 
-                List<Integer> temp = orderTypeAndOrderId.get(i);
-                Integer orderType = temp.get(0);
-                Integer orderId = temp.get(1);
+                Map temp = orderTypeAndOrderId.get(i);
+                Integer orderType = (Integer) temp.get("orderType");
+                Integer orderId = (Integer)temp.get("orderId");
 
 
 //                QueryWrapper<Order> qw = new QueryWrapper<Order>();
 //                qw.eq("order_id",orderId);
                 String tableName;
 //                写一个判断，，，查出来的是什么数字的时候直接通过这样指定表名字，，然后进行直接判断
-                if(orderType.equals(0))
+                if(orderType.equals(1))
                 {
                      tableName = "sys_order_sent";
                 }
-                else if(orderType.equals(1))
+                else if(orderType.equals(0))
                 {
                      tableName = "sys_order_substitution";
                 }
@@ -123,7 +121,13 @@ public class UserOrderController extends BaseController{
                      tableName = "sys_order_universal_service";
                 }
 
-                list.add(orderService.selectList(tableName,orderId));
+               Map map= orderService.selectList(tableName,orderId);
+                Map map1=new HashMap();
+                map1.put("order_type",orderType);
+                map1.put("orderId",orderId);
+                map1.put("price",map.get("price"));
+                map1.put("remark",map.get("remark"));
+                list.add(map1);
 
             }
 

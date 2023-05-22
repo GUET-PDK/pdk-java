@@ -9,6 +9,7 @@ import com.example.demo.entity.Order;
 import com.example.demo.mapper.TakeAwayMapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName ctfliar
@@ -22,8 +23,8 @@ public interface cAppraiseService {
 
 
     Order selectOneById(Integer OrderId,Integer userId);
-    List<List<Integer>> selectOrderIdAndOrder(Integer userId,Integer orderStatus);
-    List<Order> selectList(String tableName,Integer orderId);
+    List<Map> selectOrderIdAndOrder(String userId, Integer orderStatus);
+    Map selectList(String tableName,Integer orderId);
     int insert(Order entity);
     int selectOrderStatus(int userId);
     int appraise(Integer orderId,String comment,int userId,Integer grade);

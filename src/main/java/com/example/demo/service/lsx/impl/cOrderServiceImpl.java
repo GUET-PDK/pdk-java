@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName cAppraiseServiceImpl
@@ -45,13 +46,17 @@ public class cOrderServiceImpl implements cAppraiseService {
     }
 
     @Override
-    public List<List<Integer>> selectOrderIdAndOrder(Integer userId, Integer orderStatus) {
+    public List<Map> selectOrderIdAndOrder(String userId, Integer orderStatus) {
+
+        List<Map> list= orderMapper.selectOrderIdAndOrder(userId,orderStatus);
+        System.out.println(list.size()+"         数据梁     "+list.get(1));
         return orderMapper.selectOrderIdAndOrder(userId,orderStatus);
     }
 
     @Override
-    public List<Order> selectList(String tableName, Integer orderId) {
+    public Map selectList(String tableName, Integer orderId) {
         return orderMapper.selectList(tableName,orderId);
+
     }
 
 
