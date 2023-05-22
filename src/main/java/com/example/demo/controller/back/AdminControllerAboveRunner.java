@@ -74,7 +74,8 @@ public class AdminControllerAboveRunner {
 
     @GetMapping("getApplyList")
     public RestResponse getApplyList(){
-        return null;
+        List<ApplyMessage> applyList = adminRunner.getApplyList();
+        return RestResponse.success(applyList);
     }
 
 }
