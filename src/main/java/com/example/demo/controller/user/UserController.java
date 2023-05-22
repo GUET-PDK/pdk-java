@@ -30,11 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController extends BaseController{
 
 
-    @Value("${files.upload.path}")
+    @Value("${uploads.path}")
     private String upImagePath;
 
     //服务器返回图片地址
-    @Value("${files.get.path}")
+    @Value("${get.path}")
     private String getImagePath;
 
 
