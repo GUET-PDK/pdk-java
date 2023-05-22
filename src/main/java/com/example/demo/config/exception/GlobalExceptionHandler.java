@@ -3,6 +3,7 @@ package com.example.demo.config.exception;
 
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +40,9 @@ public class GlobalExceptionHandler {
             AppException appException = (AppException)e;
         log.error("全局异常",e);
             return RestResponse.error(appException.getCode(),appException.getMsg());
-        }else {
+        }if(e instanceof AccessDeniedException){
+            return RestResponse.error(406,"权限不足");
+        } else {
             e.printStackTrace();
         }
 

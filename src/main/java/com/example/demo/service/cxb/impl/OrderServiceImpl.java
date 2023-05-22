@@ -1,6 +1,8 @@
 package com.example.demo.service.cxb.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.demo.config.exception.AppException;
+import com.example.demo.config.exception.AppExceptionCodeMsg;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.User;
 import com.example.demo.entity.orderDetail.Sent;
@@ -44,21 +46,21 @@ public class OrderServiceImpl implements IOrderService {
         map.put("order_id",orderId);
        List<Order> list= orderMapper.selectByMap(map);
        if(list==null||list.size()==0){
-           //todo 订单id查询不到订单，是异常
+           throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
        }
        Order order=list.get(0);
        if(order.getTakeUserId()!=null){
-           //todo 订单已经被接取，有异常
+           throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
        }
        if(order.getOrderStatus()!=0){
-           //todo 订单的状态不是正在发布的状态
+           throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
        }
        order.setTakeUserId(userId);
        order.setUpdateTime(new Date());
        order.setOrderStatus(1);
        int i=orderMapper.updateById(order);
        if(i!=1){
-           //todo 接单失败有问题
+           throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
        }
        return true;
 
@@ -70,12 +72,12 @@ public class OrderServiceImpl implements IOrderService {
         map.put("order_id",orderId);
         List<Order> list=orderMapper.selectByMap(map);
         if(list==null||list.size()==0){
-            //todo 订单id查询不到订单，是异常
+            throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
         }
         if(list.get(0).getOrderStatus()!=0
                 &&
                 (!list.get(0).getTakeUserId().equals(userId))){
-            //todo 有异常，这个订单既不是未被接单状态，也不是被这个骑手接单
+            throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
         }
         int orderType=list.get(0).getOrderType();
 
