@@ -28,22 +28,6 @@ public class Order implements Serializable {
     private Date updateTime;
 
 
-    @TableField("address_1")
-    private String address1;
 
-    @TableField("address_2")
-    private String address2;
-    private String orderDescription;
-
-
-    public Order(String userId, int orderType, int orderStatus, Date createTime, String address1, String address2, String orderDescription) {
-        this.userId = userId;
-        this.orderType = orderType;
-        this.orderStatus = orderStatus;
-        this.createTime = createTime;
-        this.address1 = address1;
-        this.address2 = address2;
-        this.orderDescription = orderDescription;
-    }
 
 }

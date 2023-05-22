@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    private static final long EXPIRE = 6000*300; //过期时间，现在设置为30分钟
+    private static final long EXPIRE = 6000*30000; //过期时间，现在设置为30分钟
 
 
     //    public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥

@@ -35,12 +35,21 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
+
         String token=request.getHeader("token");
         System.out.println("进入到jwt区域");
-        if(!StringUtils.hasText(token)){
+        if(token==null||token.equals("")){
             System.out.println("可能是空的");
             filterChain.doFilter(request,response);
          return;
+        }
+        System.out.println(request.getRequestURI()+"         djhsgfsd");
+        if(request.getRequestURI().equals("/wechat/login")
+        ||request.getRequestURI().equals("/admin/getCode")
+        ||request.getRequestURI().equals("/admin/login")){
+            System.out.println("进入到这里了");
+            filterChain.doFilter(request,response);
+            return;
         }
         System.out.println("这是旧的token   "+token);
         if(!JwtUtil.verify(token)){
@@ -86,12 +95,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 
             System.out.println("到这一步就是外的事情了");
-              redisCache.deleteObject("login_"+token);
-              Map map=new HashMap();
-              map.put("userId",userId);
-              token= JwtUtil.generate(map);
-            System.out.println("这是新的token  "+token);
-              redisCache.setCacheObject("login_"+token,object,30,TimeUnit.MINUTES);
+//              redisCache.deleteObject("login_"+token);
+//              Map map=new HashMap();
+//              map.put("userId",userId);
+//              token= JwtUtil.generate(map);
+//            System.out.println("这是新的token  "+token);
+              redisCache.setCacheObject("login_"+token,object,3000,TimeUnit.MINUTES);
               response.setHeader("token",token);
         /*      response.setContentType("application/json; charset=utf-8");
               response.setCharacterEncoding("UTF-8");*/

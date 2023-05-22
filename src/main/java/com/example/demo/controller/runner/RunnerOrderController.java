@@ -1,23 +1,26 @@
 package com.example.demo.controller.runner;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.example.demo.config.exception.AppException;
+import com.example.demo.config.exception.AppExceptionCodeMsg;
 import com.example.demo.controller.user.BaseController;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.User;
 import com.example.demo.service.cxb.IOrderService;
 import com.example.demo.service.cxb.IUserService;
 import com.example.demo.utils.JwtUtil;
+import com.example.demo.utils.RedisCache;
 import com.example.demo.utils.RestResponse;
 import com.example.demo.vo.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -29,6 +32,9 @@ public class RunnerOrderController extends BaseController {
 
     @Autowired
     IUserService userService;
+
+    @Autowired
+    RedisCache redisCache;
     /**
      * 获取自己已接取过的订单
      * @param request
@@ -39,7 +45,8 @@ public class RunnerOrderController extends BaseController {
     public RestResponse getOrders(Integer orderStatus,HttpServletRequest request){
         if(orderStatus!=null){
             if(orderStatus>2||orderStatus<1){
-                //todo 异常处理
+
+                throw new AppException(AppExceptionCodeMsg.PARAMS_ERROR);
             }
         }
         String token=request.getHeader("token");
@@ -62,7 +69,7 @@ public class RunnerOrderController extends BaseController {
     public RestResponse getAllOrder(Integer orderType){
         if(orderType!=null){
             if(orderType<0||orderType>3){
-                //todo 这是异常
+                throw new AppException(AppExceptionCodeMsg.PARAMS_ERROR);
             }
         }
 
@@ -84,7 +91,7 @@ public class RunnerOrderController extends BaseController {
     @PreAuthorize("hasAuthority('接单')")
     public RestResponse confirmOrder(Integer orderId,HttpServletRequest request){
         if(orderId==null){
-            //todo 后期可能得要统一异常处理
+            throw new AppException(AppExceptionCodeMsg.PARAMS_ERROR);
         }
         String token=request.getHeader("token");
         String userId= JwtUtil.getClaim(token).get("userId").toString();
@@ -104,7 +111,7 @@ public class RunnerOrderController extends BaseController {
     public RestResponse orderMessage(Integer orderId,HttpServletRequest request){
 
         if(orderId==null){
-            //todo 后期可能得要统一异常处理
+            throw new AppException(AppExceptionCodeMsg.PARAMS_ERROR);
         }
         String token=request.getHeader("token");
         String userId= JwtUtil.getClaim(token).get("userId").toString();
@@ -124,8 +131,18 @@ public class RunnerOrderController extends BaseController {
 
        String token= request.getHeader("token");
        String userId= JwtUtil.getClaim(token).get("userId").toString();
-       userService.revocation(userId);
-return new RestResponse(200,"撤销成功",null);
+      Set<String> set= userService.revocation(userId);
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Object permissionCode : set) {
+            String permission= permissionCode.toString();
+            if (permission != null && permission != "") {
+                GrantedAuthority grantedAuthority =
+                        new SimpleGrantedAuthority(permission);
+                authorities.add(grantedAuthority);
+            }
+        }
+       redisCache.setCacheObject("login_"+token,authorities,3000, TimeUnit.MINUTES);
+        return new RestResponse(200,"撤销成功",null);
 
     }
 

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Sent extends Order implements Serializable {
     String shippingAddress;
     String recipientAddress;

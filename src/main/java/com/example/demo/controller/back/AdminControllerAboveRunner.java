@@ -44,20 +44,26 @@ public class AdminControllerAboveRunner {
 
     @GetMapping("/getRunnerApplyMessage")
     @PreAuthorize("hasAuthority('管理用户')")
-    public RestResponse getRunnerApplyMessage(String userId){
-        ApplyMessage runnerApplyMessage = adminRunner.getRunnerApplyMessage(userId);
+    public RestResponse getRunnerApplyMessage(String id){
+        ApplyMessage runnerApplyMessage = adminRunner.getRunnerApplyMessage(id);
         return RestResponse.success(runnerApplyMessage);
     }
 
 
+    /**
+     * 骑手申请表数据
+     * 用户身份信息数据
+     * @param id
+     * @return
+     */
     @PostMapping("/allowRunner")
     @PreAuthorize("hasAuthority('管理用户')")
     public RestResponse allowRunner(Integer id){
         int nums = adminRunner.allowRunner(id);
         if (nums==2) {
             return RestResponse.success(null);
-        } else {
-            return RestResponse.error(666,"更新出错辣");
+        }  else {
+            return RestResponse.error(666,"该用户已是骑手或该申请已通过,请求失败");
         }
     }
 
@@ -68,8 +74,14 @@ public class AdminControllerAboveRunner {
         if (i==1) {
             return RestResponse.success(null);
         } else {
-            return RestResponse.error(666,"后端又错了");
+            return RestResponse.error(666,"后端错了");
         }
+    }
+
+    @GetMapping("getApplyList")
+    public RestResponse getApplyList(){
+        List<ApplyMessage> applyList = adminRunner.getApplyList();
+        return RestResponse.success(applyList);
     }
 
 }

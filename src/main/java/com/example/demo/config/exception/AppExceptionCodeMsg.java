@@ -23,8 +23,10 @@ public enum AppExceptionCodeMsg {
     USER_TOKEN_PASSWORD_ERROR(407,"token验证密码失败，请重新登录"),
 
 
-    USER_NOT_EXISTS(405,"用户不存在，请重新登录");
-
+    USER_NOT_EXISTS(405,"用户不存在，请重新登录"),
+    PARAMS_ERROR(409,"参数异常"),
+    DATA_ERROR(410,"数据异常"),
+    PHONE_ERROR(411,"验证码发送失败");
 
     private Integer code;
     private String msg;

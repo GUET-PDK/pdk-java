@@ -2,6 +2,8 @@ package com.example.demo.service.cxb;
 
 import com.example.demo.entity.User;
 
+import java.util.Set;
+
 public interface IUserService {
 
     /**
@@ -11,7 +13,7 @@ public interface IUserService {
      */
     boolean addNewUser(User user);
 
-    boolean revocation(String userId);
+    Set revocation(String userId);
 
 
     /**

@@ -30,15 +30,20 @@ public interface cOrderMapper extends BaseMapper<Order> {
     List<Order> selectList(Wrapper<Order> queryWrapper);
 
 
-    @Select("select order_type,order_id from sys_order where user_id=#{userId} and order_status=#{orderStatus};")
-    List<List<Integer>> selectOrderIdAndOrder(String userId,Integer orderStatus);
+//<<<<<<< HEAD
+//    @Select("select order_type,order_id from sys_order where user_id=#{userId} and order_status=#{orderStatus};")
+//    List<List<Integer>> selectOrderIdAndOrder(String userId,Integer orderStatus);
+//=======
+    //@Select("select order_type,order_id from sys_order where user_id=#{userId} and order_status=#{orderStatus}")
+    List<Map> selectOrderIdAndOrder(String userId,Integer orderStatus);
+//>>>>>>> lsx
 
     Order selectOneById(Integer orderId,String userId);
 
 
 
-    @Select("select * from #{tableName} where order_id=#{orderId}")
-    List<Order> selectList(String tableName,Integer orderId);
+   // @Select("select * from ${tableName} where order_id=#{orderId}")
+    Map selectList(String tableName,Integer orderId);
 
 
 

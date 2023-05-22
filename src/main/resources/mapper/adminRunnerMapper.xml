@@ -11,9 +11,10 @@
         <result property="idImage" column="idImage"/>
         <result property="cardImage" column="cardImage"/>
         <result property="applyTime" column="apply_time"/>
+        <result property="status" column="status"/>
     </resultMap>
 
-    <select id="countRunner" >
+    <select id="countRunner" resultType="java.lang.Integer">
         select
             count(*)
         from
@@ -22,7 +23,7 @@
             role_id = 3;
     </select>
 
-    <select id="countDayToDay" >
+    <select id="countDayToDay"  resultType="java.lang.Integer">
         select
             count(distinct a.user_id)
         from
@@ -39,21 +40,22 @@
 
     <select id="countApplicationByStatus" resultType="java.lang.Integer">
         select
-            count()
+            count(*)
         from
             sys_apply_runner
         where
             status = #{status}
     </select>
 
-    <select id="selectApplyByUserId" resultMap="applyMessage">
+    <select id="selectApplyById" resultMap="applyMessage">
         select
-            id, userId, idNumber, cardNumber, idImage, cardImage, apply_time
+            *
         from
             sys_apply_runner
         where
-            status = #{status}
+            id = #{id}
     </select>
+
 
     <update id="updateApplyStatus">
         update
@@ -64,9 +66,9 @@
             id = #{id}
     </update>
 
-    <select id="selectUserIdById" >
+    <select id="selectUserIdById" resultType="String">
         select
-            userId
+            user_id
         from
             sys_apply_runner
         where
@@ -81,5 +83,12 @@
         where
             user_id = #{userId}
     </update>
+
+    <select id="selectAllApply" resultMap="applyMessage">
+        select
+            *
+        from
+            sys_apply_runner
+    </select>
 
 </mapper>

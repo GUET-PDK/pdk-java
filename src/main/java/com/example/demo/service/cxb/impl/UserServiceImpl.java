@@ -7,6 +7,8 @@ import com.aliyun.dysmsapi20170525.models.SendSmsResponseBody;
 import com.aliyun.tea.TeaException;
 import com.aliyun.teautil.Common;
 import com.aliyun.teautil.models.RuntimeOptions;
+import com.example.demo.config.exception.AppException;
+import com.example.demo.config.exception.AppExceptionCodeMsg;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.cxb.IUserService;
@@ -16,10 +18,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -42,17 +41,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean revocation(String userId) {
+    public Set revocation(String userId) {
 
         Integer id = userMapper.selectMiddleIdByUserId(userId);
         if (id == null) {
-            //todo 异常
+
+            throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
         }
         int i = userMapper.deleteMiddleRoleById(id);
         if (i == 0) {
-            //todo 异常
+            throw new AppException(AppExceptionCodeMsg.DATA_ERROR);
         }
-        return true;
+       Set<String> set=userMapper.selectPermissionByUserId(userId);
+        return set;
     }
 
     @Override
@@ -94,8 +95,9 @@ public class UserServiceImpl implements IUserService {
 
 
         if (!map1.get("Message").equals("OK")) {
-            //todo 发送失败，有异常
-            return false;
+
+            throw new AppException(AppExceptionCodeMsg.PHONE_ERROR);
+
         } else {
 
             redisCache.setCacheObject("Phone_" + phone, s, 5, TimeUnit.MINUTES);
