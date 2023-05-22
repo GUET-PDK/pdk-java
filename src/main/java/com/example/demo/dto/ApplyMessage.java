@@ -18,6 +18,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 public class ApplyMessage {
     private int id;
     private int userId;

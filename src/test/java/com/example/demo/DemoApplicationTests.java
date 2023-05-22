@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.mapper.AdminOrderMapper;
+import com.example.demo.service.jyc.inters.AdminOrder;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RoleEnum;
 import org.junit.jupiter.api.Test;
@@ -10,8 +12,13 @@ import javax.sound.midi.Soundbank;
 
 @SpringBootTest
 class DemoApplicationTests {
-    @Resource(name="adminService")
+    @Resource(name="adminUser")
     AdminUser adminUser;
+
+    @Resource
+    AdminOrder adminOrder;
+    @Resource
+    AdminOrderMapper adminOrderMapper;
 
     @Test
     void contextLoads() {
@@ -33,11 +40,14 @@ class DemoApplicationTests {
         System.out.println(adminUser.getAllUsers());
     }
 
+//    @Test
+//    void testUpdate(){
+//        System.out.println(adminUser.banUser("c2348078-398b-4978-af65-8bb6579993e7",0));
+//    }
+
     @Test
-    void testUpdate(){
-        System.out.println(adminUser.banUser("c2348078-398b-4978-af65-8bb6579993e7",1));
+    void testAdminOrder(){
+        System.out.println(adminOrder.getAllOrders());
     }
-
-
 
 }
