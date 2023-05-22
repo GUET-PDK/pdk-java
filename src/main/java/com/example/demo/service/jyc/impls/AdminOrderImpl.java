@@ -31,12 +31,16 @@ public class AdminOrderImpl implements AdminOrder {
     @Override
     public List<OrderMessage> getAllOrders() throws RuntimeException{
         List<OrderMessage> orderMessages = adminOrderMapper.selectAllOrders();
+
         Integer orderSent = orderType.getOrderSent();
         Integer substitution = orderType.getSubstitution();
         Integer takeAway = orderType.getTakeAway();
         Integer universal = orderType.getUniversal();
+
         orderMessages.forEach(orderMessage -> {
-            if (orderMessage.getOrderType()==orderSent) {
+            System.out.println(orderMessage.getOrderType());
+            System.out.println(orderMessage.getOrderId());
+            if (orderSent.equals(orderMessage.getOrderType())) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromSent(orderMessage.getOrderId());
                 if (orap!=null) {
                     orderMessage.setRemark(orap.getRemark());
@@ -44,7 +48,7 @@ public class AdminOrderImpl implements AdminOrder {
                 } else {
                     throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
-            } else if (orderMessage.getOrderType()==substitution) {
+            } else if (substitution.equals(orderMessage.getOrderType())) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromSubstitution(orderMessage.getOrderId());
                 if (orap!=null) {
                     orderMessage.setRemark(orap.getRemark());
@@ -52,7 +56,7 @@ public class AdminOrderImpl implements AdminOrder {
                 } else {
                     throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
-            } else if (orderMessage.getOrderType()==takeAway) {
+            } else if (takeAway.equals(orderMessage.getOrderType())) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromTakeAway(orderMessage.getOrderId());
                 if (orap!=null) {
                     orderMessage.setRemark(orap.getRemark());
@@ -60,7 +64,7 @@ public class AdminOrderImpl implements AdminOrder {
                 } else {
                     throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
-            } else if (orderMessage.getOrderType()==universal) {
+            } else if (universal.equals(orderMessage.getOrderType())) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromUniversal(orderMessage.getOrderId());
                 if (orap!=null) {
                     orderMessage.setRemark(orap.getRemark());
@@ -72,7 +76,6 @@ public class AdminOrderImpl implements AdminOrder {
                 throw new OrderNotMatchException("订单类型异常，该订单类型未定义");
             }
         });
-
         return orderMessages;
     }
 

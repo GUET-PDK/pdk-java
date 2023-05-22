@@ -17,7 +17,7 @@
         from
             sys_order_sent
         where
-            order_id = #{oederId}
+            order_id = #{orderId}
     </select>
     <select id="selectRemarkAndPriceFromSubstitution" resultType="com.example.demo.dto.OrderRemarkAndPrice">
         select
@@ -25,15 +25,15 @@
         from
             sys_order_substitution
         where
-            order_id = #{oederId}
+            order_id = #{orderId}
     </select>
     <select id="selectRemarkAndPriceFromTakeAway" resultType="com.example.demo.dto.OrderRemarkAndPrice">
         select
             remark,price
         from
-            sys_order_takeAway
+            sys_order_takeaway
         where
-            order_id = #{oederId}
+            order_id = #{orderId}
     </select>
     <select id="selectRemarkAndPriceFromUniversal" resultType="com.example.demo.dto.OrderRemarkAndPrice">
         select
@@ -41,7 +41,7 @@
         from
             sys_order_universal
         where
-            order_id = #{oederId}
+            order_id = #{orderId}
     </select>
 
     <select id="selectOrderTypeById" resultType="Integer">

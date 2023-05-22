@@ -24,6 +24,6 @@ public class OrderMessage {
     private Integer orderStatus;
     private String createTime;
     private String updateTime;
-    private String remark;
-    private Integer price;
+    private String remark = "";
+    private Integer price = 0;
 }
