@@ -14,7 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("sys_address")
 public class Address implements Serializable {
-
     @TableId(value = "address_id",type = IdType.AUTO)
     private int addressId;
     private String addressDescription;

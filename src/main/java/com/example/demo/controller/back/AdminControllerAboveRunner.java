@@ -5,10 +5,7 @@ import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RestResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,6 +22,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@CrossOrigin(origins = "*")
 @RequestMapping("/admin")
 public class AdminControllerAboveRunner {
 
