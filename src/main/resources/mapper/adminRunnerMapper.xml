@@ -11,6 +11,7 @@
         <result property="idImage" column="idImage"/>
         <result property="cardImage" column="cardImage"/>
         <result property="applyTime" column="apply_time"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <select id="countRunner" resultType="java.lang.Integer">
@@ -48,7 +49,7 @@
 
     <select id="selectApplyById" resultMap="applyMessage">
         select
-            id, userId, idNumber, cardNumber, idImage, cardImage, apply_time,status
+            *
         from
             sys_apply_runner
         where
@@ -65,9 +66,9 @@
             id = #{id}
     </update>
 
-    <select id="selectUserIdById" >
+    <select id="selectUserIdById" resultType="String">
         select
-            userId
+            user_id
         from
             sys_apply_runner
         where
@@ -83,7 +84,7 @@
             user_id = #{userId}
     </update>
 
-    <select id="selectAllApply" resultType="com.example.demo.dto.ApplyMessage">
+    <select id="selectAllApply" resultMap="applyMessage">
         select
             *
         from

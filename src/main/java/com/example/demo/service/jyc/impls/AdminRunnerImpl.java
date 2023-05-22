@@ -4,8 +4,6 @@ import com.example.demo.dto.ApplyMessage;
 import com.example.demo.mapper.AdminRunnerMapper;
 import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.utils.SqlDateLastWeekListUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +70,8 @@ public class AdminRunnerImpl implements AdminRunner {
 
     @Override
     public ApplyMessage getRunnerApplyMessage(String id) {
+//        System.out.println(id);
+//        System.out.println(applyMessage);
         return adminRunnerMapper.selectApplyById(id);
     }
 
