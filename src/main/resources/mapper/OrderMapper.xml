@@ -34,7 +34,7 @@
                 where order_id=#{orderId}
     </select>
     <select id="selectTakeaway" resultType="com.example.demo.entity.orderDetail.Takeaway">
-        select shipping_address as shippingAddress,pick_up_positon as pickUpPosition,
+        select shipping_address as shippingAddress,pick_up_position as pickUpPosition,
                remark,price
 from sys_order_takeaway
 where order_id=#{orderId}

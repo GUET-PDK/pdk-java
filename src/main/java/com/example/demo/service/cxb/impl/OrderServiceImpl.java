@@ -83,6 +83,8 @@ public class OrderServiceImpl implements IOrderService {
 
         if(orderType==0){
             Substitution substitution = orderMapper.selectSubstitution(orderId);
+            System.out.println(substitution.toString());
+
             substitution.setOrderType(orderType);
             substitution.setOrderId(list.get(0).getOrderId());
             return substitution;
