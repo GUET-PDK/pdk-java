@@ -12,6 +12,8 @@ import com.example.demo.utils.RestResponse;
 import com.example.demo.utils.upLoads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,7 @@ import java.util.List;
  * @Version 1.0
  **/
 @RestController
+@CrossOrigin(origins = "*")
 public class UserOrderController extends BaseController{
 
 
@@ -72,6 +75,7 @@ public class UserOrderController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/selectOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse selectOrder(HttpServletRequest request,Integer status)
     {
 
@@ -79,8 +83,6 @@ public class UserOrderController extends BaseController{
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
         Integer userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());
-
-
         //status分别表示未结单，配送中，已完成三种状态
         //示例值:
         //0或1或2
@@ -149,6 +151,7 @@ public class UserOrderController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/getOrderDetail")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse getOrderDetail(HttpServletRequest request,Integer orderId)
     {
 
@@ -191,6 +194,7 @@ public class UserOrderController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/commentOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse commentOrder(HttpServletRequest request,Integer orderId,String comment,Integer grade)
     {
 
@@ -228,6 +232,7 @@ public class UserOrderController extends BaseController{
 
 
     @RequestMapping("/sentPublishOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse sentPublishOrder(
             String shippingAddress,
             String recipientAddress,
@@ -308,6 +313,7 @@ public class UserOrderController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/substitutionPublishOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse substitutionPublishOrder(
             String shippingAddress,
             String deliveryTime1,
@@ -379,6 +385,7 @@ public class UserOrderController extends BaseController{
 
 
     @RequestMapping("/takeawayPublishOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse takeawayPublishOrder(
             String shippingAddress,
             String pickUpPositon,
@@ -434,6 +441,7 @@ public class UserOrderController extends BaseController{
 
 
     @RequestMapping("/universalServicePublishOrder")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse universalServicePublishOrder(
             String serviceDescription,
             Integer price,

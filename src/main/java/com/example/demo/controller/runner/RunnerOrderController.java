@@ -11,10 +11,7 @@ import com.example.demo.utils.RestResponse;
 import com.example.demo.vo.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -23,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/runner")
 public class RunnerOrderController extends BaseController {
 
@@ -137,7 +135,7 @@ return new RestResponse(200,"撤销成功",null);
      * @return
      */
     @GetMapping("/getAccessCount")
-    @PreAuthorize("hasAuthority('接单')")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse getAccessCount(HttpServletRequest request){
         String token= request.getHeader("token");
         String userId= JwtUtil.getClaim(token).get("userId").toString();

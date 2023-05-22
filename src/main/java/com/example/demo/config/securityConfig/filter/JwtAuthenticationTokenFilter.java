@@ -86,12 +86,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 
             System.out.println("到这一步就是外的事情了");
-              redisCache.deleteObject("login_"+token);
-              Map map=new HashMap();
-              map.put("userId",userId);
-              token= JwtUtil.generate(map);
-            System.out.println("这是新的token  "+token);
-              redisCache.setCacheObject("login_"+token,object,30,TimeUnit.MINUTES);
+//              redisCache.deleteObject("login_"+token);
+//              Map map=new HashMap();
+//              map.put("userId",userId);
+//              token= JwtUtil.generate(map);
+//            System.out.println("这是新的token  "+token);
+//              redisCache.setCacheObject("login_"+token,object,30,TimeUnit.MINUTES);
               response.setHeader("token",token);
         /*      response.setContentType("application/json; charset=utf-8");
               response.setCharacterEncoding("UTF-8");*/

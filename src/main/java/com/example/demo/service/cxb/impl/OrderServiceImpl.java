@@ -33,7 +33,8 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public List<OrderVo> getAllOrder(Integer orderType) {
-       List<OrderVo> list= orderMapper.selectOrderVo(orderType,null,null);
+       List<OrderVo> list= orderMapper.selectOrderVo(orderType,null,0);
+
         return list;
     }
 

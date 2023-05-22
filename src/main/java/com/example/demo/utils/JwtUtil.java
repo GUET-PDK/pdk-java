@@ -2,6 +2,7 @@ package com.example.demo.utils;
 
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -13,18 +14,19 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    private static final long EXPIRE = 6000*300; //过期时间，现在设置为30分钟
+    private static final long EXPIRE = 6000*30000; //过期时间，现在设置为30分钟
+
 
     //    public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥
-    public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥
+   // public static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);//密钥，动态生成的密钥
     // decode the base64 encoded string
 //    String encodedKey="hhhh";
 //    byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
 //    // rebuild key using SecretKeySpec
 //    public static final SecretKey key SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
-
-
+    public static final String key1= "0123456789_0123456789_0123456789";
+    public static final SecretKey key=  Keys.hmacShaKeyFor(key1.getBytes());
+   // public static final SecretKey Key = new SecretKeySpec(key1.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     /**
      * 生成token
      *

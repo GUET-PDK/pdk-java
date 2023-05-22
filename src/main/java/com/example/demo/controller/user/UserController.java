@@ -11,6 +11,7 @@ import com.example.demo.utils.upLoads;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController extends BaseController{
 
 
-    @Value("${files.upload.path}")
+    @Value("${uploads.path}")
     private String upImagePath;
 
     //服务器返回图片地址
-    @Value("${files.get.path}")
+    @Value("${get.path}")
     private String getImagePath;
 
 
@@ -55,6 +56,7 @@ public class UserController extends BaseController{
      * @return null
      **/
     @RequestMapping("/updateName")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse updateName(String userName,String userPhone,String userAvator, HttpServletRequest request){
        String token= request.getHeader("token");
 
@@ -99,6 +101,7 @@ public class UserController extends BaseController{
      * @return com.example.demo.utils.RestResponse
      **/
     @RequestMapping("/updateAddress")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse updateAddress(@RequestParam("address") String address,String addressPhone,String addressName,HttpServletRequest request){
 
         String token= request.getHeader("token");
@@ -122,6 +125,7 @@ public class UserController extends BaseController{
 
 
     @RequestMapping("/beRunner")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse beRunner(String idNumber, String cardNumber, MultipartFile idImage,MultipartFile cardImage,HttpServletRequest request){
 
         String idImagePath = new upLoads().upLoad(idImage,upImagePath,getImagePath);
@@ -149,6 +153,7 @@ public class UserController extends BaseController{
 
 
     @RequestMapping("/deleteAddress")
+    @PreAuthorize("hasAuthority('下订单')")
     public RestResponse deleteAddress(HttpServletRequest request,String addressId ){
 
 
