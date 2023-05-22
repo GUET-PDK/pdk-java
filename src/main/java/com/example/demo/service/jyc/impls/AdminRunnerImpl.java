@@ -71,8 +71,8 @@ public class AdminRunnerImpl implements AdminRunner {
     }
 
     @Override
-    public ApplyMessage getRunnerApplyMessage(String userId) {
-        return adminRunnerMapper.selectApplyByUserId(userId);
+    public ApplyMessage getRunnerApplyMessage(String id) {
+        return adminRunnerMapper.selectApplyById(id);
     }
 
     /**

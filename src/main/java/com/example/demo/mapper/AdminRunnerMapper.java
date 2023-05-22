@@ -13,7 +13,7 @@ public interface AdminRunnerMapper {
 
     Integer countApplicationByStatus(@Param("status") Integer status);
 
-    ApplyMessage selectApplyByUserId(@Param("status") String userId);
+    ApplyMessage selectApplyById(@Param("id") String id);
 
     int updateApplyStatus(@Param("id")Integer id,@Param("status")Integer status);
 

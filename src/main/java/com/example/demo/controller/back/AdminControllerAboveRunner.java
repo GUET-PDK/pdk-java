@@ -44,8 +44,8 @@ public class AdminControllerAboveRunner {
 
     @GetMapping("/getRunnerApplyMessage")
     @PreAuthorize("hasAuthority('管理用户')")
-    public RestResponse getRunnerApplyMessage(String userId){
-        ApplyMessage runnerApplyMessage = adminRunner.getRunnerApplyMessage(userId);
+    public RestResponse getRunnerApplyMessage(String id){
+        ApplyMessage runnerApplyMessage = adminRunner.getRunnerApplyMessage(id);
         return RestResponse.success(runnerApplyMessage);
     }
 

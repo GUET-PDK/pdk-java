@@ -46,13 +46,13 @@
             status = #{status}
     </select>
 
-    <select id="selectApplyByUserId" resultMap="applyMessage">
+    <select id="selectApplyById" resultMap="applyMessage">
         select
-            id, userId, idNumber, cardNumber, idImage, cardImage, apply_time
+            id, userId, idNumber, cardNumber, idImage, cardImage, apply_time,status
         from
             sys_apply_runner
         where
-            status = #{status}
+            id = #{id}
     </select>
 
     <update id="updateApplyStatus">

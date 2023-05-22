@@ -26,5 +26,6 @@ public class ApplyMessage {
     private int cardNumber;
     private String idImage;
     private String cardImage;
-    private Date applyTime;
+    private String applyTime;
+    private Integer status;
 }

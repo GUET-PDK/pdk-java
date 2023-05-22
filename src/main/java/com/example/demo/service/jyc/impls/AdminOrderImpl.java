@@ -1,4 +1,5 @@
 package com.example.demo.service.jyc.impls;
+import com.example.demo.controller.back.myException.OrderNotMatchException;
 import com.example.demo.dto.OrderMessage;
 import com.example.demo.dto.OrderRemarkAndPrice;
 import com.example.demo.mapper.AdminOrderMapper;
@@ -41,7 +42,7 @@ public class AdminOrderImpl implements AdminOrder {
                     orderMessage.setRemark(orap.getRemark());
                     orderMessage.setPrice(orap.getPrice());
                 } else {
-                    throw new RuntimeException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
+                    throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
             } else if (orderMessage.getOrderType()==substitution) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromSubstitution(orderMessage.getOrderId());
@@ -49,7 +50,7 @@ public class AdminOrderImpl implements AdminOrder {
                     orderMessage.setRemark(orap.getRemark());
                     orderMessage.setPrice(orap.getPrice());
                 } else {
-                    throw new RuntimeException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
+                    throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
             } else if (orderMessage.getOrderType()==takeAway) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromTakeAway(orderMessage.getOrderId());
@@ -57,7 +58,7 @@ public class AdminOrderImpl implements AdminOrder {
                     orderMessage.setRemark(orap.getRemark());
                     orderMessage.setPrice(orap.getPrice());
                 } else {
-                    throw new RuntimeException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
+                    throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
             } else if (orderMessage.getOrderType()==universal) {
                 OrderRemarkAndPrice orap = adminOrderMapper.selectRemarkAndPriceFromUniversal(orderMessage.getOrderId());
@@ -65,10 +66,10 @@ public class AdminOrderImpl implements AdminOrder {
                     orderMessage.setRemark(orap.getRemark());
                     orderMessage.setPrice(orap.getPrice());
                 } else {
-                    throw new RuntimeException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
+                    throw new OrderNotMatchException("订单发布后另一个表没更新啊蠢蛋用户端开发人员");
                 }
             } else {
-                throw new RuntimeException("订单类型异常，该订单类型未定义");
+                throw new OrderNotMatchException("订单类型异常，该订单类型未定义");
             }
         });
 

@@ -38,7 +38,6 @@ public class AdminController {
     /**
      * 登录获取验证码
      */
-
     @RequestMapping("/getCode")
     public RestResponse getCode(String phone) throws Exception {
 

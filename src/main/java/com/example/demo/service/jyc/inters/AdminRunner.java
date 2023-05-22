@@ -13,7 +13,7 @@ public interface AdminRunner {
 
     Map<String,Integer> countApplication();
 
-    ApplyMessage getRunnerApplyMessage(String userId);
+    ApplyMessage getRunnerApplyMessage(String id);
 
     int allowRunner(Integer id);
 
