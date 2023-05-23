@@ -54,8 +54,8 @@ public class cOrderServiceImpl implements cAppraiseService {
 //=======
     public List<Map> selectOrderIdAndOrder(String userId, Integer orderStatus) {
 
-        List<Map> list= orderMapper.selectOrderIdAndOrder(userId,orderStatus);
-        System.out.println(list.size()+"         数据梁     "+list.get(1));
+//        List<Map> list= orderMapper.selectOrderIdAndOrder(userId,orderStatus);
+//        System.out.println(list.size()+"         数据梁     "+list.get(1));
 
         return orderMapper.selectOrderIdAndOrder(userId,orderStatus);
     }

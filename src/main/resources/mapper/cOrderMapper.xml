@@ -40,7 +40,14 @@ values (#{shippingAddress},
     </insert>
 
     <select id="selectOrderIdAndOrder" resultType="java.util.HashMap">
-        select order_type as orderType,order_id as orderId from sys_order where user_id=#{userId} and order_status=#{orderStatus}
+        select order_type as orderType,order_id as orderId from sys_order
+        <where>
+            user_id=#{userId}
+
+            <if test="orderStatus!=null">
+              and  order_status=#{orderStatus}
+            </if>
+        </where>
     </select>
 
 <select id="selectList" resultType="java.util.HashMap">
