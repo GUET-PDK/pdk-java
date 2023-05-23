@@ -163,4 +163,19 @@ public class RunnerOrderController extends BaseController {
     return response;
     }
 
+    @GetMapping("/getMyEarnings")
+    @PreAuthorize("hasAuthority('下订单')")
+    public RestResponse getMyEarnings(HttpServletRequest request){
+        String token= request.getHeader("token");
+        String userId= JwtUtil.getClaim(token).get("userId").toString();
+       Integer earning= orderService.getMyEarnings(userId);
+       Map map=new HashMap();
+       if(earning==null){
+           map.put("earning",0);
+       }else {
+           map.put("earning",earning);
+       }
+       return new RestResponse(200,"返回成功",map);
+    }
+
 }

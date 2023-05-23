@@ -54,4 +54,12 @@ where order_id=#{orderId}
         from sys_order_substitution
 where order_id=#{orderId}
     </select>
+
+    <select id="sumOfPriceByUserIdAndStatus" resultType="java.lang.Integer">
+        SELECT SUM(COALESCE(b.price,c.price,d.price,e.price)) as price from sys_order a left JOIN sys_order_sent b on a.order_id=b.order_id
+                                                                                        left JOIN sys_order_takeaway c on a.order_id=c.order_id
+                                                                                        left JOIN sys_order_substitution d on a.order_id=d.order_id
+                                                                                        left JOIN sys_order_universal_service e on a.order_id=e.order_id
+        WHERE a.take_user_id=#{userId} AND a.order_status=#{orderStatus}
+    </select>
 </mapper>

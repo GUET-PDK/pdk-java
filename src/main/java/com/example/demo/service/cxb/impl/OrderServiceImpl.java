@@ -115,5 +115,10 @@ public class OrderServiceImpl implements IOrderService {
         return count;
     }
 
+    @Override
+    public Integer getMyEarnings(String userId) {
+       return orderMapper.sumOfPriceByUserIdAndStatus(userId,2);
+    }
+
 
 }

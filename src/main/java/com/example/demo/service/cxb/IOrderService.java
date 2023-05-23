@@ -30,4 +30,5 @@ public interface IOrderService {
      */
     int getOrderCountByUserId(String userId);
 
+    Integer getMyEarnings(String userId);
 }

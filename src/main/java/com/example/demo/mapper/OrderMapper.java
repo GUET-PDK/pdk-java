@@ -18,4 +18,5 @@ public interface OrderMapper extends BaseMapper<Order> {
     Takeaway selectTakeaway(int orderId);
     UniversalService selectUniversalService(int orderId);
     Substitution selectSubstitution(int orderId);
+    Integer sumOfPriceByUserIdAndStatus(String userId,int orderStatus);
 }
