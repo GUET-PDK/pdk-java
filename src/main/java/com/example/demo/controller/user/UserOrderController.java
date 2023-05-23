@@ -81,6 +81,8 @@ public class UserOrderController extends BaseController{
     {
 
 
+
+
         String token=request.getHeader("token");
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
@@ -138,10 +140,11 @@ public class UserOrderController extends BaseController{
 
             return new RestResponse(200,"查询订单成功",list);
         }catch (RuntimeException e){
-            e.printStackTrace();
-        }
 
-        return new RestResponse(200,"查询订单失败",null);
+            e.printStackTrace();
+            return new RestResponse(403,"查询订单失败",null);
+
+        }
 
     };
 
@@ -377,7 +380,8 @@ public class UserOrderController extends BaseController{
             return new RestResponse(200,"发布成功",null);
 
         } catch (Exception e) {
-            return new RestResponse(200,"发布失败",e);
+            e.printStackTrace();
+            return new RestResponse(500,"发布失败",e);
 
         }
 

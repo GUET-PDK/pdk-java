@@ -35,7 +35,7 @@ public interface cUserMapper extends BaseMapper<User> {
 
     @Select("select address_id," +
             "address_description," +
-            "address_name,address_phone " +
+            "address_name,address_phone,user_id "+
             "from sys_user_address where user_id = #{userId}")
     List<Address> selectAddressListByUserId(String userId);
 

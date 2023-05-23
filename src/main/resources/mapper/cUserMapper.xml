@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.cUserMapper">
-    <update id="updateAddress">
-        update sys_user_address set address_description = #{address},
-                                     address_phone = #{addressPhone},
-                                    address_name = #{addressName}
-                                where user_id = #{userId}
-    </update>
+    <insert id="updateAddress">
+        insert sys_user_address(address_description,
+                                     address_phone,
+                                    address_name,user_id ) values(#{address},#{addressPhone},#{addressName},#{userId})
+
+    </insert>
 
 
     <delete id="deleteAddress">
