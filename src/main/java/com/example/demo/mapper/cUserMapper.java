@@ -24,7 +24,7 @@ public interface cUserMapper extends BaseMapper<User> {
 
 
 //    userId,address,addressPhone,addressName
-    Address updateAddress(String userId,String address,String addressPhone,String addressName);
+    void updateAddress(String userId,String address,String addressPhone,String addressName);
 
     void deleteAddress(String addressId,String userId);
 
@@ -37,7 +37,7 @@ public interface cUserMapper extends BaseMapper<User> {
             "address_description," +
             "address_name,address_phone " +
             "from sys_user_address where user_id = #{userId}")
-    List<Address> selectAddressListByUserId(int userId);
+    List<Address> selectAddressListByUserId(String userId);
 
 
     @Insert("insert into sys_user_image(user_id,image_url) values(#{userId},#{imageUrl})")

@@ -9,6 +9,7 @@ import com.example.demo.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,7 +47,7 @@ public class WechatController extends BaseController{
 //     * @return
 //     * @return com.example.demo.utils.RestResponse
 //     **/
-//    @RequestMapping("/wechat/login")
+//    @PostMapping("/wechat/login")
 //    public RestResponse wechatLogin(String code,HttpServletRequest request){
 //
 //        String token= request.getHeader("token");
@@ -97,7 +98,7 @@ public class WechatController extends BaseController{
     };
 
 
-//    @RequestMapping("/user/getAccessCount")
+//    @PostMapping("/user/getAccessCount")
 //    public RestResponse getAccessCount(HttpServletRequest request){
 //
 //
@@ -122,7 +123,7 @@ public class WechatController extends BaseController{
 
         String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
-        int userId = Integer.parseInt(jwt.getClaim(token).get("userId").toString());;
+        String userId = jwt.getClaim(token).get("userId").toString();
 
 
         List<Address> addressList = userService.selectAddressListByUserId(userId);
