@@ -52,8 +52,8 @@ public class AdminControllerAboveRunner {
 
     /**
      * 骑手申请表数据
-     * 用户身份信息数据
-     * @param id
+     * 用户身份信息数据（插入）
+     * @param id 用户表id
      * @return
      */
     @PostMapping("/allowRunner")

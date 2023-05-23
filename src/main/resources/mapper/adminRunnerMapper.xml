@@ -91,4 +91,20 @@
             sys_apply_runner
     </select>
 
+    <select id="selectUserByUserId" resultType="com.example.demo.entity.User">
+        select
+            *
+        from
+            sys_user
+        where
+            user_id = #{userId}
+    </select>
+
+    <insert id="insertUserRole" >
+        insert into
+            middle_user_role(id,user_id,role_id,creat_time,update_time)
+        values
+            (null,#{userId},#{roleId},#{createTime},#{updateTime})
+    </insert>
+
 </mapper>

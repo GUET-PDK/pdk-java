@@ -1,11 +1,13 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.ApplyMessage;
+import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AdminRunnerMapper {
@@ -24,4 +26,9 @@ public interface AdminRunnerMapper {
     int updateRoleIdByUserId(@Param("userId")String userId);
 
     List<ApplyMessage> selectAllApply();
+
+    User selectUserByUserId(String userId);
+
+    int insertUserRole(Map<String, Object> map);
+
 }
