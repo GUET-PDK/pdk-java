@@ -18,6 +18,8 @@ public class upLoads {
 
     public String upLoad(MultipartFile file, String upImagePath, String getImagePath){
 
+
+        System.out.println("======="+upImagePath);
         String filename = file.getOriginalFilename();
         String filename1 = System.currentTimeMillis()+"."+filename.substring(filename.lastIndexOf(".")+1);
 

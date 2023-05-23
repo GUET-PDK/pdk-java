@@ -57,7 +57,7 @@ public class UserController extends BaseController{
      * @return
      * @return null
      **/
-    @RequestMapping("/updateName")
+    @PostMapping("/updateName")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse updateName(String userName,String userPhone,String userAvator, HttpServletRequest request){
        String token= request.getHeader("token");
@@ -102,7 +102,7 @@ public class UserController extends BaseController{
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/addAddress")
+    @PostMapping("/addAddress")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse updateAddress(String address_description,String address_phone,String address_name,HttpServletRequest request){
 
@@ -126,21 +126,30 @@ public class UserController extends BaseController{
 
 
 
-    @RequestMapping("/beRunner")
+    @PostMapping(value = "/beRunner")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse beRunner(String idNumber, String cardNumber, MultipartFile idImage,MultipartFile cardImage,HttpServletRequest request){
 
         String idImagePath = new upLoads().upLoad(idImage,upImagePath,getImagePath);
         String cardImagePath = new upLoads().upLoad(cardImage,upImagePath,getImagePath);
 
+
+        log.debug("图片路径",idImage);
+
         String token= request.getHeader("token");
         JwtUtil jwt = new JwtUtil();
         String userId = jwt.getClaim(token).get("userId").toString();;
 
-        Apply apply = new Apply(userId,idNumber,cardNumber,idImagePath,cardImagePath);
+        Apply apply = new Apply();
+        apply.setUserId(userId);
+        apply.setIdNumber(idNumber);
+        apply.setCardNumber(cardNumber);
+        apply.setCardImage(cardImagePath);
+        apply.setIdImage(idImagePath);
+
 
         try{
-            applyService.insert(apply);
+            int t =applyService.insert(apply);
             return new RestResponse(200,"申请已提交，待审核",null);
         }catch (RuntimeException e)
         {
@@ -154,7 +163,7 @@ public class UserController extends BaseController{
 
 
 
-    @RequestMapping("/deleteAddress")
+    @PostMapping("/deleteAddress")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse deleteAddress(HttpServletRequest request,String addressId ){
 
@@ -177,7 +186,7 @@ public class UserController extends BaseController{
 
 
 
-    @RequestMapping("/uploadImage")
+    @PostMapping("/uploadImage")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse uploadImage(String title,MultipartFile image,HttpServletRequest request){
 

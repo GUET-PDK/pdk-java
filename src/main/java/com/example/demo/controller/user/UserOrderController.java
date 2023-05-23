@@ -14,9 +14,8 @@ import com.example.demo.utils.upLoads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -203,7 +202,7 @@ public class UserOrderController extends BaseController{
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/commentOrder")
+    @PostMapping("/commentOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse commentOrder(HttpServletRequest request,Integer orderId,String comment,Integer grade)
     {
@@ -241,7 +240,7 @@ public class UserOrderController extends BaseController{
 
 
 
-    @RequestMapping("/sentPublishOrder")
+    @PostMapping("/sentPublishOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse sentPublishOrder(
             String shippingAddress,
@@ -323,7 +322,7 @@ public class UserOrderController extends BaseController{
      * @return
      * @return com.example.demo.utils.RestResponse
      **/
-    @RequestMapping("/substitutionPublishOrder")
+    @PostMapping("/substitutionPublishOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse substitutionPublishOrder(
             String shippingAddress,
@@ -387,7 +386,7 @@ public class UserOrderController extends BaseController{
 
 
 
-    @RequestMapping("/takeawayPublishOrder")
+    @PostMapping("/takeawayPublishOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse takeawayPublishOrder(
             String shippingAddress,
@@ -443,7 +442,7 @@ public class UserOrderController extends BaseController{
 
 
 
-    @RequestMapping("/universalServicePublishOrder")
+    @PostMapping("/universalServicePublishOrder")
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse universalServicePublishOrder(
             String serviceDescription,

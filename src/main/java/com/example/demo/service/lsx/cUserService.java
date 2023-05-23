@@ -22,7 +22,7 @@ public interface cUserService extends IService<User>{
 
     void upImage(String userId,String imageUrl);
 
-    Address updateAddress(String userId, String address,String addressPhone, String addressName);
+    void updateAddress(String userId, String address,String addressPhone, String addressName);
 
     public int MyUpdateById(User entity);
 
@@ -32,7 +32,7 @@ public interface cUserService extends IService<User>{
 
     String selecetOpenId(String userId);
 
-    List<Address> selectAddressListByUserId(int userId);
+    List<Address> selectAddressListByUserId(String userId);
 
 
 }
