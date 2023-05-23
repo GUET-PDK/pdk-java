@@ -291,6 +291,7 @@ public class UserOrderController extends BaseController{
         sentPublishOrder.setCourierSize(courizer_size);
         sentPublishOrder.setPrice(price);
         sentPublishOrder.setRemark(remark);
+        sentPublishOrder.setShippingAddress(shippingAddress);
         sentPublishOrder.setRecipientAddress(recipientAddress);
         sentPublishOrder.setType(type);
 

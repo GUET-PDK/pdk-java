@@ -20,6 +20,8 @@ import java.util.List;
 public interface cUserService extends IService<User>{
 
 
+    void upImage(String userId,String imageUrl);
+
     Address updateAddress(String userId, String address,String addressPhone, String addressName);
 
     public int MyUpdateById(User entity);

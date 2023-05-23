@@ -19,6 +19,10 @@ import java.util.List;
  **/
 @Service
 public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements cUserService {
+    @Override
+    public void upImage(String userId, String imageUrl) {
+        userMapper.upImage(userId,imageUrl);
+    }
 
     @Autowired
     cUserMapper userMapper;

@@ -27,11 +27,11 @@ public class Apply implements Serializable {
     @TableId("id")
     int id;
     String userId;
-    int cardNumber;
-    int idNumber;
+    String cardNumber;
+    String idNumber;
     String idImage;
     String cardImage;
-    public Apply(String userId, int cardNumber, int idNumber, String idImage, String cardImage) {
+    public Apply(String userId, String cardNumber, String idNumber, String idImage, String cardImage) {
         this.userId = userId;
         this.cardNumber = cardNumber;
         this.idNumber = idNumber;

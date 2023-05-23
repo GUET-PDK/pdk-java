@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName UserController
@@ -135,7 +137,7 @@ public class UserController extends BaseController{
         JwtUtil jwt = new JwtUtil();
         String userId = jwt.getClaim(token).get("userId").toString();;
 
-        Apply apply = new Apply(userId,Integer.parseInt(idNumber),Integer.parseInt(cardNumber),idImagePath,cardImagePath);
+        Apply apply = new Apply(userId,idNumber,cardNumber,idImagePath,cardImagePath);
 
         try{
             applyService.insert(apply);
@@ -172,6 +174,33 @@ public class UserController extends BaseController{
 
 
     };
+
+
+
+    @RequestMapping("/uploadImage")
+    @PreAuthorize("hasAuthority('下订单')")
+    public RestResponse uploadImage(String title,MultipartFile image,HttpServletRequest request){
+
+
+
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+
+        String imagePath = new upLoads().upLoad(image,upImagePath,getImagePath);
+
+        try {
+            userService.upImage(userId,imagePath);
+            Map<String,Object> result = new HashMap<>();
+            result.put("url",imagePath);
+            return new RestResponse(200,"ok",result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
 
 

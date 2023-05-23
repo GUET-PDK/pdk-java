@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Apply;
 import com.example.demo.entity.User;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -38,4 +39,7 @@ public interface cUserMapper extends BaseMapper<User> {
             "from sys_user_address where user_id = #{userId}")
     List<Address> selectAddressListByUserId(int userId);
 
+
+    @Insert("insert into sys_user_image(user_id,image_url) values(#{userId},#{imageUrl})")
+    void upImage(String userId, String imageUrl);
 }
