@@ -45,7 +45,7 @@ public interface cOrderMapper extends BaseMapper<Order> {
    // @Select("select * from ${tableName} where order_id=#{orderId}")
     Map selectList(String tableName,Integer orderId);
 
-
+    Map selectAllList(String tableName,String userId);
 
 //    用户查询当前订单的状态，，参数为用户id
     int selectOrderStatus(int userId);

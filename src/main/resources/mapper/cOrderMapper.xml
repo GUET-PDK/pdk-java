@@ -21,15 +21,8 @@ values (#{comment},#{grade},#{orderId},#{userId})
     </select>
 
     <insert id="insertSubstitution">
-        insert into sys_order_substitution(shipping_address,
-                                           order_id,
-                                           delivery_time_1,
-                                           delivery_time_2,
-                                           pickup_code,
-                                           remark,
-                                           courier_size,
-                                           price)
-values (#{shippingAddress},
+        insert into sys_order_substitution(shipping_address,order_id,delivery_time_1,delivery_time_2,pickup_code,remark,courier_size,price)
+        values (#{shippingAddress},
         #{orderId},
         #{deliveryTime1},
         #{deliveryTime2},
@@ -53,4 +46,7 @@ values (#{shippingAddress},
 <select id="selectList" resultType="java.util.HashMap">
     select * from ${tableName} where order_id=#{orderId}
 </select>
+
+
+
 </mapper>

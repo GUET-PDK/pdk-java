@@ -28,9 +28,9 @@ public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements c
     cUserMapper userMapper;
 
     @Override
-    public Address updateAddress(String userId, String address,String addressPhone,String addressName) {
+    public void updateAddress(String userId, String address,String addressPhone,String addressName) {
 
-        return userMapper.updateAddress(userId,address,addressPhone,addressName);
+        userMapper.updateAddress(userId,address,addressPhone,addressName);
     }
 
 
@@ -50,7 +50,12 @@ public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements c
     }
 
     @Override
-    public List<Address> selectAddressListByUserId(int userId) {
+    public List<Address> selectAddressListByUserId(String userId) {
         return userMapper.selectAddressListByUserId(userId);
+    }
+
+    @Override
+    public User selectMessageById(String userId) {
+        return userMapper.selectMessageById(userId);
     }
 }
