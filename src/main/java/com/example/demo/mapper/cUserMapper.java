@@ -42,4 +42,8 @@ public interface cUserMapper extends BaseMapper<User> {
 
     @Insert("insert into sys_user_image(user_id,image_url) values(#{userId},#{imageUrl})")
     void upImage(String userId, String imageUrl);
+
+    @Select("select  user_name,user_phone,user_avatar,user_id from sys_user" +
+            " where user_id = #{userId}")
+    User selectMessageById(String userId);
 }

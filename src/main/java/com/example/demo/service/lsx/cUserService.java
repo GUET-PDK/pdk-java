@@ -35,4 +35,5 @@ public interface cUserService extends IService<User>{
     List<Address> selectAddressListByUserId(String userId);
 
 
+    User selectMessageById(String userId);
 }

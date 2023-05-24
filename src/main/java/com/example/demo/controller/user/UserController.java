@@ -59,7 +59,7 @@ public class UserController extends BaseController{
      **/
     @PostMapping("/updateName")
     @PreAuthorize("hasAuthority('下订单')")
-    public RestResponse updateName(String userName,String userPhone,String userAvator, HttpServletRequest request){
+    public RestResponse updateName(String userName,String userPhone,MultipartFile userAvator, HttpServletRequest request){
        String token= request.getHeader("token");
 
 
@@ -67,11 +67,12 @@ public class UserController extends BaseController{
 //        JwtUtil jwt = new JwtUtil();
         String userId = JwtUtil.getClaim(token).get("userId").toString();;
 
+        String imagePath = new upLoads().upLoad(userAvator,upImagePath,getImagePath);
 
         User user = new User();
         user.setUserId(userId);
         user.setUserName(userName);
-        user.setUserAvatar(userAvator);
+        user.setUserAvatar(imagePath); //头像
         user.setUserPhone(userPhone);
 
         int flag = userService.MyUpdateById(user);
@@ -210,6 +211,34 @@ public class UserController extends BaseController{
 
 
     }
+
+
+
+    @RequestMapping("/getMessage")
+    @PreAuthorize("hasAuthority('下订单')")
+    public RestResponse getMessage(HttpServletRequest request){
+
+        String token=request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+        User user = new User();
+        user = userService.selectMessageById(userId);
+
+        Map<String,String> result = new HashMap<>();
+        result.put("userName",user.getUserName());
+        result.put("userPhone",user.getUserPhone());
+        result.put("userAvatar",user.getUserAvatar());
+
+
+        return new RestResponse(200,"查询成功",result);
+
+
+
+    }
+
+
+
 
 
 

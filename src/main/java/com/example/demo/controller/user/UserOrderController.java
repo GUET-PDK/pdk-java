@@ -11,6 +11,7 @@ import com.example.demo.service.lsx.impl.cOrderServiceImpl;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RestResponse;
 import com.example.demo.utils.upLoads;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +35,7 @@ import java.util.*;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/user")
+@Slf4j
 public class UserOrderController extends BaseController{
 
 
@@ -96,14 +98,17 @@ public class UserOrderController extends BaseController{
         try{
 
             //通过status，和userId找到orderType(对应不同的表)和orderId,返回的是一个列表
+            log.error("map---------------------");
             List<Map> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId,orderStatus);
 
             List<Object> list = new ArrayList<>();
+
             for(int i=0;i<orderTypeAndOrderId.size();i++)
             {
                 //oderType,0,1,2,3对应下面四种类型的订单表,
-
+                log.error("map---------------------");
                 Map temp = orderTypeAndOrderId.get(i);
+                log.error("map==============");
                 Integer orderType = (Integer) temp.get("orderType");
                 Integer orderId = (Integer)temp.get("orderId");
 
@@ -501,8 +506,102 @@ public class UserOrderController extends BaseController{
 
 
 
+    @RequestMapping("/getAllStatusOrder")
+    public RestResponse getAllStatusOrder(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        JwtUtil jwt = new JwtUtil();
+        String userId = jwt.getClaim(token).get("userId").toString();
+
+//        List<String> tableNameList = new ArrayList<>();
+//        tableNameList.add("sys_order_substitution");
+//        tableNameList.add("sys_order_sent");
+//        tableNameList.add("sys_order_takeaway");
+//        tableNameList.add("sys_order_universal_service");
+//
+//
+//        List<Object> list = new ArrayList<>();
+//
+//        try {
+//            for(int i=0;i<4;i++)
+//            {
+//                String tableName = tableNameList.get(i);
+//                System.out.println("tableName"+tableName);
+//                Map map = orderService.selectAllList(tableName,userId);
+//                Map map1=new HashMap();
+//                map1.put("order_type",i);
+//                map1.put("orderId",map.get("order_id");
+//                map1.put("price",map.get("price"));
+//                map1.put("remark",map.get("remark"));
+//                list.add(map1);
+//            }
+//            return new RestResponse(200,"查询订单成功",list);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+////        }
+//
+//
+//    }
+
+
+        try {
+            List<Object> list = new ArrayList<>();
+
+            //通过status，和userId找到orderType(对应不同的表)和orderId,返回的是一个列表
+            for (int n = 0; n < 3; n++) {
+
+                System.out.println("当前查询的订单类型为===" + n);
+
+                List<Map> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId, n);
 
 
 
+                //当存在那样状态的订单，才会查，不然跳过，查下一个状态，否则为0的话，map赋值会出错
+                if(orderTypeAndOrderId.size()!=0)
+                {
+
+                    for (int i = 0; i < orderTypeAndOrderId.size(); i++) {
+                        //oderType,0,1,2,3对应下面四种类型的订单表,
+
+                        Map temp = orderTypeAndOrderId.get(i);
+                        Integer orderType = (Integer) temp.get("orderType");
+                        Integer orderId = (Integer) temp.get("orderId");
+
+
+                        String tableName;
+                        //                写一个判断，，，查出来的是什么数字的时候直接通过这样指定表名字，，然后进行直接判断
+                        if (orderType.equals(1)) {
+                            tableName = "sys_order_sent";
+                        } else if (orderType.equals(0)) {
+                            tableName = "sys_order_substitution";
+                        } else if (orderType.equals(2)) {
+                            tableName = "sys_order_takeaway";
+                        } else {
+                            tableName = "sys_order_universal_service";
+                        }
+
+                        Map map = orderService.selectList(tableName, orderId);
+                        Map map1 = new HashMap();
+                        map1.put("order_type", orderType);
+                        map1.put("orderId", orderId);
+                        map1.put("price", map.get("price"));
+                        map1.put("remark", map.get("remark"));
+                        list.add(map1);
+
+                    }
+
+                }
+                }
+
+
+            return new RestResponse(200, "查询订单成功", list);
+        } catch (RuntimeException e) {
+
+            e.printStackTrace();
+            return new RestResponse(403, "查询订单失败", null);
+
+        }
+
+
+    }
 
 }

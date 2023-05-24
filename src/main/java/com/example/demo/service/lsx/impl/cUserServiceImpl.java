@@ -53,4 +53,9 @@ public class cUserServiceImpl extends ServiceImpl<cUserMapper,User> implements c
     public List<Address> selectAddressListByUserId(String userId) {
         return userMapper.selectAddressListByUserId(userId);
     }
+
+    @Override
+    public User selectMessageById(String userId) {
+        return userMapper.selectMessageById(userId);
+    }
 }

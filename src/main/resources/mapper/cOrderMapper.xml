@@ -39,4 +39,7 @@ values (#{comment},#{grade},#{orderId},#{userId})
 <select id="selectList" resultType="java.util.HashMap">
     select * from ${tableName} where order_id=#{orderId}
 </select>
+
+
+
 </mapper>
