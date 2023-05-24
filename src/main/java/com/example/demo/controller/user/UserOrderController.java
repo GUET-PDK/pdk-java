@@ -103,6 +103,7 @@ public class UserOrderController extends BaseController{
                 log.error("map==============");
                 Integer orderType = (Integer) temp.get("orderType");
                 Integer orderId = (Integer)temp.get("orderId");
+                String createTime= createTime =temp.get("createTime").toString();
 //                QueryWrapper<Order> qw = new QueryWrapper<Order>();
 //                qw.eq("order_id",orderId);
                 String tableName;
@@ -129,6 +130,7 @@ public class UserOrderController extends BaseController{
                 map1.put("orderId",orderId);
                 map1.put("price",map.get("price"));
                 map1.put("remark",map.get("remark"));
+                map1.put("createTime",createTime);
                 list.add(map1);
             }
             return new RestResponse(200,"查询订单成功",list);

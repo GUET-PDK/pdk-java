@@ -33,7 +33,7 @@ values (#{comment},#{grade},#{orderId},#{userId})
     </insert>
 
     <select id="selectOrderIdAndOrder" resultType="java.util.HashMap">
-        select order_type as orderType,order_id as orderId from sys_order
+        select order_type as orderType,order_id as orderId ,create_time as createTime from sys_order
         <where>
             user_id=#{userId}
 
