@@ -1,6 +1,7 @@
 package com.example.demo.service.jyc.impls;
 
 import com.example.demo.dto.ApplyMessage;
+import com.example.demo.entity.User;
 import com.example.demo.mapper.AdminRunnerMapper;
 import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.utils.SqlDateLastWeekListUtil;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,15 +80,32 @@ public class AdminRunnerImpl implements AdminRunner {
     /**
      * 通过管理员的骑手申请步骤：
      *      申请表申请记录的状态改为通过
-     *      用户角色表通过用户id更改角色属性
+     *      用户角色表通过用户id插入角色属性
      * @param id 用户id
      * @return 影响的记录条数
      */
     @Override
     @Transactional
     public int allowRunner(Integer id) {
+        //申请表状态改为1，表示同意
         int i1 = adminRunnerMapper.updateApplyStatus(id, 1);
-        int i2 = adminRunnerMapper.updateRoleIdByUserId(adminRunnerMapper.selectUserIdById(id));
+        //申请表查出该用户的用户名
+        String userId = adminRunnerMapper.selectUserIdById(id);
+        //通过用户名在sys_user表去查询用户信息，返回User对象
+        User user = adminRunnerMapper.selectUserByUserId(userId);
+
+        //获取当前时间作为更新时间,并转换成数据库的Date类型
+        Date nowTime = Date.valueOf(LocalDate.now());
+
+        Map<String,Object> map =new HashMap<>();
+        map.put("userId",userId);
+        map.put("createTime", user.getCreateTime());
+        map.put("updateTime",nowTime);
+        map.put("roleId",3);
+
+        //用户角色中间表新增记录
+        int i2 = adminRunnerMapper.insertUserRole(map);
+//        int i2 = adminRunnerMapper.updateRoleIdByUserId(adminRunnerMapper.selectUserIdById(id));
         if ((i1+i2)==2) {
             return i1 + i2;
         }

@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.mapper.AdminOrderMapper;
 import com.example.demo.service.jyc.inters.AdminOrder;
+import com.example.demo.service.jyc.inters.AdminRunner;
 import com.example.demo.service.jyc.inters.AdminUser;
 import com.example.demo.utils.RoleEnum;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,13 @@ class DemoApplicationTests {
     @Test
     void testAdminOrder(){
         System.out.println(adminOrder.getAllOrders());
+    }
+
+    @Resource(name = "adminRunner")
+    private AdminRunner adminRunner;
+    @Test
+    void testAllow(){
+        adminRunner.allowRunner(15);
     }
 
 }
