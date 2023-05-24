@@ -21,9 +21,9 @@ import java.sql.Date;
 @ToString
 public class ApplyMessage {
     private int id;
-    private int userId;
-    private int idNumber;
-    private int cardNumber;
+    private String userId;
+    private String idNumber;
+    private String cardNumber;
     private String idImage;
     private String cardImage;
     private String applyTime;

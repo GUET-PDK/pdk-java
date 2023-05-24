@@ -123,8 +123,8 @@ public class AdminRunnerImpl implements AdminRunner {
 
     @Override
     public List<ApplyMessage> getApplyList() {
-        List<ApplyMessage> list = new ArrayList<>();
-        adminRunnerMapper.selectAllApply();
-        return null;
+//        List<ApplyMessage> list = new ArrayList<>();
+       return adminRunnerMapper.selectAllApply();
+
     }
 }
