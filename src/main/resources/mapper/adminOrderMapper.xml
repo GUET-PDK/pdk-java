@@ -39,7 +39,7 @@
         select
             remark,price
         from
-            sys_order_universal
+            sys_order_universal_service
         where
             order_id = #{orderId}
     </select>
