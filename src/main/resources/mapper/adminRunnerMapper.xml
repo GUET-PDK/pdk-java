@@ -5,11 +5,11 @@
 <mapper namespace="com.example.demo.mapper.AdminRunnerMapper">
     <resultMap id="applyMessage" type="com.example.demo.dto.ApplyMessage">
         <id property="id" column="id"/>
-        <result property="userId" column="userId"/>
-        <result property="idNumber" column="idNumber"/>
-        <result property="cardNumber" column="cardNumber"/>
-        <result property="idImage" column="idImage"/>
-        <result property="cardImage" column="cardImage"/>
+        <result property="userId" column="user_id"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="cardNumber" column="card_number"/>
+        <result property="idImage" column="id_image"/>
+        <result property="cardImage" column="card_image"/>
         <result property="applyTime" column="apply_time"/>
         <result property="status" column="status"/>
     </resultMap>

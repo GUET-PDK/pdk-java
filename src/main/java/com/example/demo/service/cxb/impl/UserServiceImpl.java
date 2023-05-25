@@ -93,7 +93,7 @@ public class UserServiceImpl implements IUserService {
         Map<String, Object> map1 = body.toMap();
         System.out.println(map1.get("Message"));
 
-
+        System.out.println(map1.get("Message")+"            hhhhhhh");
         if (!map1.get("Message").equals("OK")) {
 
             throw new AppException(AppExceptionCodeMsg.PHONE_ERROR);

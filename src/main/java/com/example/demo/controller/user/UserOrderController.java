@@ -81,10 +81,6 @@ public class UserOrderController extends BaseController{
     @PreAuthorize("hasAuthority('下订单')")
     public RestResponse selectOrder(HttpServletRequest request,Integer orderStatus)
     {
-
-
-
-
         String token=request.getHeader("token");
 //        使用jwt的工具类，，拿到token里面的用户id
         JwtUtil jwt = new JwtUtil();
@@ -92,11 +88,7 @@ public class UserOrderController extends BaseController{
         //status分别表示未结单，配送中，已完成三种状态
         //示例值:
         //0或1或2
-
-
-
         try{
-
             //通过status，和userId找到orderType(对应不同的表)和orderId,返回的是一个列表
             log.error("map---------------------");
             List<Map> orderTypeAndOrderId = orderService.selectOrderIdAndOrder(userId,orderStatus);
@@ -111,8 +103,7 @@ public class UserOrderController extends BaseController{
                 log.error("map==============");
                 Integer orderType = (Integer) temp.get("orderType");
                 Integer orderId = (Integer)temp.get("orderId");
-
-
+                String createTime= createTime =temp.get("createTime").toString();
 //                QueryWrapper<Order> qw = new QueryWrapper<Order>();
 //                qw.eq("order_id",orderId);
                 String tableName;
@@ -139,10 +130,9 @@ public class UserOrderController extends BaseController{
                 map1.put("orderId",orderId);
                 map1.put("price",map.get("price"));
                 map1.put("remark",map.get("remark"));
+                map1.put("createTime",createTime);
                 list.add(map1);
-
             }
-
             return new RestResponse(200,"查询订单成功",list);
         }catch (RuntimeException e){
 
