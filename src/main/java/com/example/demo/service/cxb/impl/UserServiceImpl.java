@@ -67,9 +67,9 @@ public class UserServiceImpl implements IUserService {
         }
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
                 // 必填，您的 AccessKey ID
-                .setAccessKeyId("LTAI5tKWyDEGiMjeThV7yJPW")
+                .setAccessKeyId("xxxx")
                 // 必填，您的 AccessKey Secret
-                .setAccessKeySecret("H1HpzVZTQvrHZ0YbK3pGSmjblMNRyP");
+                .setAccessKeySecret("xxxxx");
         // 访问的域名
         System.out.println("呵呵艰苦环境和");
         config.endpoint = "dysmsapi.aliyuncs.com";
@@ -82,8 +82,8 @@ public class UserServiceImpl implements IUserService {
         com.aliyun.dysmsapi20170525.models.SendSmsRequest sendSmsRequest = new SendSmsRequest()
                 .setPhoneNumbers(phone)
                 .setTemplateParam(code)
-                .setSignName("越泽")
-                .setTemplateCode("SMS_460781174");
+                .setSignName("xxx")
+                .setTemplateCode("xxxx");
 
 //        try {
         // 复制代码运行请自行打印 API 的返回值
